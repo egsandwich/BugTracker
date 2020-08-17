@@ -5,6 +5,7 @@ import db from "./firebase";
 import firebase from 'firebase'
 
 //dashboard
+//more views i guess
 function App() {
   const [projectName, setProjectName] = useState("");
   const [projectOwner, setProjectOwner] = useState("");
