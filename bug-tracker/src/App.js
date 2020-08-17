@@ -9,6 +9,8 @@ function App() {
   const [projectName, setProjectName] = useState("");
   const [projectOwner, setProjectOwner] = useState("");
   const [projects, setProjects] = useState([]);
+  const [tickets, setTickets] = useState([]);
+
 
   const createProject = (event) => {
     //get project name
