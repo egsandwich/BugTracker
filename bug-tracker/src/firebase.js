@@ -1,14 +1,14 @@
 import firebase from "firebase";
 
 const firebaseApp = firebase.initializeApp({
-  apiKey: "AIzaSyDwaFCk7qHxqTRgkqXFjUuEUxGGZlZGak4",
-  authDomain: "bug-tracker-66524.firebaseapp.com",
-  databaseURL: "https://bug-tracker-66524.firebaseio.com",
-  projectId: "bug-tracker-66524",
-  storageBucket: "bug-tracker-66524.appspot.com",
-  messagingSenderId: "895563865199",
-  appId: "1:895563865199:web:d199f5a4ec47118c42c19a",
-  measurementId: "G-DKKZQQMK96",
+  apiKey: "AIzaSyAwpO3jAxS67_MCMRBQIdTMopk4rcegaJw",
+  authDomain: "bug-tracker-egvl.firebaseapp.com",
+  databaseURL: "https://bug-tracker-egvl.firebaseio.com",
+  projectId: "bug-tracker-egvl",
+  storageBucket: "bug-tracker-egvl.appspot.com",
+  messagingSenderId: "853256968072",
+  appId: "1:853256968072:web:0d6bf5c4a223f045fb8c3d",
+  measurementId: "G-HDERQJSZTM",
 });
 
 const db = firebaseApp.firestore();
