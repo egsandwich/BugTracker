@@ -1,38 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-import Project from "./Project";
+
+import Contact from "./Contact";
+import Login from "./Login";
+import Dasboard from "./Dashboard";
 import db from "./firebase";
-import firebase from 'firebase'
+import firebase from 'firebase';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import CreateProject from "./CreateProject";
+import Dashboard from "./Dashboard";
 
 //dashboard
 //more views i guess
 function App() {
-  const [projectName, setProjectName] = useState("");
-  const [projectOwner, setProjectOwner] = useState("");
-  const [projects, setProjects] = useState([]);
-  const [tickets, setTickets] = useState([]);
-
-
-  const createProject = (event) => {
-    //get project name
-    //get project owner
-    // createProject
-    event.preventDefault();
-
-    db.collection('projects').add({
-      projectName: projectName,
-      projectOwner: projectOwner,
-      //time?  
-      dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    /* setProjects([
-       ...projects,
-       { projectName: projectName, projectOwner: projectOwner },
-     ]); save locally
-     */
-    setProjectName("");
-    setProjectOwner("");
-  };
   //in use effect for the future, check if logged in
 
   //useEffect(() => {}, [
@@ -40,41 +20,42 @@ function App() {
   //]); //run code in a condition in react
 
 
-  // create option to order things
-  useEffect(() => {
-    db.collection("projects")
-      .orderBy('projectName', 'asc')
-      .onSnapshot((snapshot) => {
-        setProjects(snapshot.docs.map((doc) => doc.data()))
-      });
-  }, [])
+
 
   console.log(projects);
   return (
-    <div className="App">
-      <form>
-        <p>
-          <input
-            value={projectName}
-            onChange={(event) => setProjectName(event.target.value)}
-          />
-        </p>
-        <p>
-          <input
-            value={projectOwner}
-            onChange={(event) => setProjectOwner(event.target.value)}
-          />
-        </p>
+    <Router>
+      <div className="App">
+        <nav>
 
-        <button type="submit" onClick={createProject}>
-          Create Project
-        </button>
-      </form>
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/login">Login</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact</Link>
+            </li>
+            <li>
+              <Link to="/registerProject">Create</Link>
+            </li>
+          </ul>
 
-      {projects.map((project) => (
-        <Project name={project.projectName} owner={project.projectOwner} />
-      ))}
-    </div>
+        </nav>
+
+        {/* if logged in show dashboard */}
+        <Switch>
+          <Route path="/contact" component={Contact} />
+          <Route path="/login" component={Login} />
+          <Route path="/registerProject" component={CreateProject} />
+          <Route path="/registerProject" component={CreateProject} />
+          <Route path="/" component={Dashboard} />
+        </Switch>
+
+      </div>
+    </Router>
   );
 }
 
