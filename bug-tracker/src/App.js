@@ -4,10 +4,9 @@ import "./App.css";
 import Contact from "./Contact";
 import Login from "./Login";
 import Dasboard from "./Dashboard";
-import db from "./firebase";
-import firebase from 'firebase';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import CreateProject from "./CreateProject";
+import CreateTicket from "./CreateTicket";
 import Dashboard from "./Dashboard";
 
 //dashboard
@@ -20,9 +19,6 @@ function App() {
   //]); //run code in a condition in react
 
 
-
-
-  console.log(projects);
   return (
     <Router>
       <div className="App">
@@ -50,7 +46,7 @@ function App() {
           <Route path="/contact" component={Contact} />
           <Route path="/login" component={Login} />
           <Route path="/registerProject" component={CreateProject} />
-          <Route path="/registerProject" component={CreateProject} />
+          <Route path="/registerTicket" component={CreateTicket} />
           <Route path="/" component={Dashboard} />
         </Switch>
 

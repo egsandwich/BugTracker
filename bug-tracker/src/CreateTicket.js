@@ -5,54 +5,38 @@ import { Redirect } from "react-router-dom";
 
 {/*EDIT THIS OUT */ }
 function CreateTicket() {
-    const [projectName, setProjectName] = useState("");
-    const [projectOwner, setProjectOwner] = useState("");
-    const [projects, setProjects] = useState([]);
-    const [tickets, setTickets] = useState([]);
+    const [tickets, setTickets] = useState(["Theres a bug on line 18", "Tomorrow    "]);
+    const [ticketDescription, setTicketDescription] = useState("");
 
-
-    const createProject = (event) => {
-        //get project name
-        //get project owner|
-        // createProject
+    const createTicket = (event) => {
         event.preventDefault();
-        {/*copy this code for creating tickets*/ }
-        db.collection('projects').add({
-            projectName: projectName,
-            projectOwner: projectOwner,
-            //time?  
-            dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        /* setProjects([
-           ...projects,
-           { projectName: projectName, projectOwner: projectOwner },
-         ]); save locally
-         */
-        setProjectName("");
-        setProjectOwner("");
-    };
+        setTickets([...tickets, ticketDescription])
+        setTicketDescription("");
+    }
+
+
+    console.log(tickets);
     return (
         <div>
             <form>
                 <p>
                     <input
-                        value={projectName}
-                        onChange={(event) => setProjectName(event.target.value)}
-                    />
-                </p>
-                <p>
-                    <input
-                        value={projectOwner}
-                        onChange={(event) => setProjectOwner(event.target.value)}
+                        value={ticketDescription}
+                        onChange={(event) => setTicketDescription(event.target.value)}
                     />
                 </p>
 
-                <button type="submit" onClick={createProject}>
-                    Create Project
+
+                <button type="submit" onClick={createTicket}>
+                    Create Ticket
         </button>
             </form>
+
+            {tickets.map((ticket) =>
+                <p>{ticket}</p>
+            )}
         </div>
     );
 }
 
-export default CreateProject;
+export default CreateTicket;

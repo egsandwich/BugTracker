@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import db from "./firebase";
 import firebase from 'firebase';
-import { Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 function CreateProject(props) {
     const [projectName, setProjectName] = useState("");
     const [projectOwner, setProjectOwner] = useState("");
-    const [projects, setProjects] = useState([]);
-    const [tickets, setTickets] = useState([]);
+    // const [projects, setProjects] = useState([]);
+    // const [tickets, setTickets] = useState([]);
 
 
     const createProject = (event) => {
@@ -30,9 +30,15 @@ function CreateProject(props) {
         setProjectName("");
         setProjectOwner("");
     };
+
+    {/*figure out how to redirect */ }
+    const goToDashboard = (event) => {
+        event.preventDefault()
+        this.props.history.push('/dashboard');
+    }
     return (
         <div>
-            <form>
+            <form> {/*onSubmit={this.goToDashboard.bind(this)}> */}
                 <p>
                     <input
                         value={projectName}
@@ -49,9 +55,12 @@ function CreateProject(props) {
                 <button type="submit" onClick={createProject}>
                     Create Project
         </button>
+
             </form>
         </div>
     );
 }
+
+
 
 export default CreateProject;
