@@ -1,7 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import db from "./firebase";
 import firebase from 'firebase';
-import { withRouter } from "react-router-dom";
+import { Redirect, withRouter, Route } from "react-router-dom";
+
+{/*figure out how to redirect */ }
+function goToDashboard(e) {
+    e.preventDefault()
+    this.props.history.push('/dashboard');
+
+}
+
 
 function CreateProject(props) {
     const [projectName, setProjectName] = useState("");
@@ -9,7 +17,8 @@ function CreateProject(props) {
     // const [projects, setProjects] = useState([]);
     // const [tickets, setTickets] = useState([]);
 
-
+    //this.setState({ dashboard: false });
+    const [dashState, setDashState] = useState(false);
     const createProject = (event) => {
         //get project name
         //get project owner|
@@ -21,24 +30,16 @@ function CreateProject(props) {
             projectOwner: projectOwner,
             //time?  
             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-        })
-        /* setProjects([
-           ...projects,
-           { projectName: projectName, projectOwner: projectOwner },
-         ]); save locally
-         */
+        }).then(() => setDashState(!dashState))
         setProjectName("");
         setProjectOwner("");
     };
 
-    {/*figure out how to redirect */ }
-    const goToDashboard = (event) => {
-        event.preventDefault()
-        this.props.history.push('/dashboard');
-    }
+
+    console.log(dashState);
     return (
         <div>
-            <form> {/*onSubmit={this.goToDashboard.bind(this)}> */}
+            <form>
                 <p>
                     <input
                         value={projectName}
@@ -57,6 +58,7 @@ function CreateProject(props) {
         </button>
 
             </form>
+            {dashState ? <Redirect to='/' /> : <Route path='/registerProject' />}
         </div>
     );
 }
