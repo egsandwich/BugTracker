@@ -1,27 +1,23 @@
 import React, { useState } from "react";
 import db from './firebase';
-import { Redirect, withRouter, Link } from "react-router-dom";
+import { Redirect, withRouter, useHistory } from "react-router-dom";
+import CreateTicket from "./CreateTicket";
 
 
 {/* put animation on the name of the project to indicate that it is clickable */ }
 function Project(props) {
 
 
-  const [projectDetails, setProjectDetails] = useState("");
+  // const [projectDetails, setProjectDetails] = useState("");
 
-  const saveDetails = (event) => {
-    setProjectDetails(props);
-  }
-
+  // const saveDetails = (event) => {
+  //   setProjectDetails(props);
+  // }
+  const history = useHistory();
   return (
     <div>
       <h2>{props.name}</h2>
-      <Link to={{
-        pathname: "/registerTicket",
-        state: {
-          details: props
-        }
-      }}> Add ticket</Link>
+      <p>{props.id}</p>
       {/*{props.owner}*/}
     </div >
   );

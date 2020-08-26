@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 
-function Ticket() {
+function Ticket(props) {
+    const [tickets, setTickets] = useState(["Theres a bug on line 18", "Tomorrow    "]);
+    const [ticketDescription, setTicketDescription] = useState("");
     return (
         <div>
+
+
 
         </div>
     );
