@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import db from "./firebase";
 import firebase from 'firebase';
-import { Redirect, useHistory } from "react-router-dom";
+import { Redirect, useParams } from "react-router-dom";
 import Ticket from './Ticket';
 
 //props = project component
@@ -19,9 +19,15 @@ function CreateTicket(props) {
         setTicketDescription("");
     }
 
+    const param = useParams();
 
-    console.log(tickets);
-    let history = useHistory();
+    console.log(param);
+
+    {/*
+    create a collection from the project document 
+    try to automate na yung name of the ticket collection would be nameofproject append tickets
+    then redirect to project container updated with the ticket
+    */}
     return (
         <div>
             <h1> Reg Ticket</h1>

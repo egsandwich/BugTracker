@@ -46,10 +46,10 @@ function App() {
         {/* if logged in show dashboard */}
         <Switch>
           <Route path="/contact" component={Contact} />
-          <Route path="/project/:" component={Project} />
+          <Route path="/projects/:projectId" component={Project} />
           <Route path="/login" component={Login} />
           <Route path="/registerProject" component={CreateProject} />
-          <Route path="/registerTicket" component={CreateTicket} />
+          <Route path="/:projectId/registerTicket" component={CreateTicket} />
           <Route path="/tickets" component={Ticket} />
           <Route path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />

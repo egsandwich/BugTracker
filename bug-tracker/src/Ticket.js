@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 function Ticket(props) {
-    const [tickets, setTickets] = useState(["Theres a bug on line 18", "Tomorrow    "]);
+    const [tickets, setTickets] = useState([]);
     const [ticketDescription, setTicketDescription] = useState("");
     return (
         <div>
