@@ -1,41 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import db from './firebase';
-import { Redirect, withRouter, useHistory } from "react-router-dom";
+import firebase from 'firebase';
+import { withRouter, useParams, Link } from "react-router-dom";
 import CreateTicket from "./CreateTicket";
 
 
 {/* put animation on the name of the project to indicate that it is clickable */ }
 function Project(props) {
 
+  const [nameOfProj, setNameOfProj] = useState("");
 
-  // const [projectDetails, setProjectDetails] = useState("");
+  const params = useParams();
+  console.log(params.projectId)
+  useEffect(() => {
+    db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
+      .get().then(snapshot => snapshot.docs.forEach(doc => {
+        saveProjectName(doc)
+      }
 
-  // const saveDetails = (event) => {
-  //   setProjectDetails(props);
-  // }
-  const history = useHistory();
+      ))
+
+  });
+
+
+  function saveProjectName(a) {
+    setNameOfProj(a.data().projectName)
+
+  }
+
+  function createTicket() {
+
+  }
   return (
     <div>
-      <h2>{props.name}</h2>
-      <p>{props.id}</p>
+      <h2>{nameOfProj}</h2>
+      <p></p>
+      <Link to={`/${params.projectId}/registerTicket`}>
+        Add Ticket
+      </Link>
       {/*{props.owner}*/}
     </div >
   );
 }
 
-function handleClick(props) {
-
-  /* Redirect to the project to view details */
-  // alert(`${props.name}'s details: ${props.owner} is the owner of this project`)
-
-  // return <Route path='/registerTicket' />
-  this.props.history.push('/registerTicket');
-}
-
-
-function redirectToCreateTicket() {
-  return (<Redirect to='/registerTicket' />)
-}
 
 
 export default withRouter(Project);

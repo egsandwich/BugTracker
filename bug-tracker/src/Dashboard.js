@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Project from "./Project";
-import ProjectDetails from "./ProjectDetails";
+import Preview from "./Preview";
 import db from "./firebase";
 import firebase from 'firebase';
-import { Route } from "react-router-dom";
+import { Route, Link } from "react-router-dom";
 
 function Dashboard() {
     const [projects, setProjects] = useState([]);
@@ -28,28 +28,24 @@ function Dashboard() {
     }, [])
 
 
-
-
-
     return (
         <div>
-            <Route path="/projects" component={Project} />
-            <Route path="/projects/:projectName" component={ProjectDetails} />
 
             <h2>Dashboard</h2>
             {/* pass in an object */}
             {projects.map((project) => (
-                <Project name={project.projectName} id={project.id} owner={project.projectOwner} />
-            ))}
+                // <Project name={project.projectName} id={project.id} owner={project.projectOwner} />
+                <Link to={`/projects/${project.id}`} >
+                    <Preview name={project.projectName} id={project.id} owner={project.projectOwner} />
+                </Link>
 
-        </div>
+            ))
+            }
+
+
+        </div >
     );
 }
 
-// function getId() {
-//     var docRef = db.collection("projects");
-
-//     console.log(docRef)
-// }
 
 export default Dashboard;

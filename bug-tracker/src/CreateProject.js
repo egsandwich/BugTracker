@@ -20,9 +20,6 @@ function CreateProject(props) {
     //this.setState({ dashboard: false });
     const [dashState, setDashState] = useState(false);
     const createProject = (event) => {
-        //get project name
-        //get project owner|
-        // createProject
         event.preventDefault();
         {/*copy this code for creating tickets*/ }
         db.collection('projects').add({
