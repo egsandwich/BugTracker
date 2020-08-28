@@ -9,7 +9,7 @@ import CreateProject from "./CreateProject";
 import CreateTicket from "./CreateTicket";
 import Dashboard from "./Dashboard";
 import Project from "./Project";
-import Ticket from "./Ticket";
+import TicketList from "./TicketList";
 
 //dashboard
 //more views i guess
@@ -50,7 +50,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/registerProject" component={CreateProject} />
           <Route path="/:projectId/registerTicket" component={CreateTicket} />
-          <Route path="/tickets" component={Ticket} />
+          <Route path="/tickets/:projectId" component={TicketList} />
           <Route path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>

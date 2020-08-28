@@ -11,7 +11,9 @@ function Project(props) {
   const [nameOfProj, setNameOfProj] = useState("");
 
   const params = useParams();
-  console.log(params.projectId)
+  // console.log(params.projectId)
+
+
   useEffect(() => {
     db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
       .get().then(snapshot => snapshot.docs.forEach(doc => {
@@ -21,7 +23,6 @@ function Project(props) {
       ))
 
   });
-
 
   function saveProjectName(a) {
     setNameOfProj(a.data().projectName)

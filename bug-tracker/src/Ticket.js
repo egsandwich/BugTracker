@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from 'react'
 
 function Ticket(props) {
-    const [tickets, setTickets] = useState([]);
-    const [ticketDescription, setTicketDescription] = useState("");
+    console.log(props);
     return (
         <div>
-
-
-
+            {props.description}
         </div>
-    );
+    )
 }
 
-export default Ticket;
+export default Ticket
