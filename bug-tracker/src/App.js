@@ -50,7 +50,7 @@ function App() {
           <Route path="/login" component={Login} />
           <Route path="/registerProject" component={CreateProject} />
           <Route path="/:projectId/registerTicket" component={CreateTicket} />
-          <Route path="/tickets/:projectId" component={TicketList} />
+          {/* <Route path="/tickets/:projectId" component={TicketList} /> */}
           <Route path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>

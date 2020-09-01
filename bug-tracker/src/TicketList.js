@@ -4,6 +4,7 @@ import db from './firebase';
 import firebase from 'firebase';
 import Ticket from './Ticket'
 
+// delete?
 function TicketList(props) {
     const [tickets, setTickets] = useState([]);
 

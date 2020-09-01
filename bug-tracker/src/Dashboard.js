@@ -35,8 +35,9 @@ function Dashboard() {
             {/* pass in an object */}
             {projects.map((project) => (
                 // <Project name={project.projectName} id={project.id} owner={project.projectOwner} />
-                <Link to={`/projects/${project.id}`} >
+                <Link to={`/projects/${project.id}`} style={{ textDecoration: 'none' }} >
                     <Preview name={project.projectName} id={project.id} owner={project.projectOwner} />
+                    {/* put margins here? */}
                 </Link>
 
             ))

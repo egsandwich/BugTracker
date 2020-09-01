@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import db from "./firebase";
 import firebase from 'firebase';
 import { Redirect, useParams, Route, Link } from "react-router-dom";
+import Button from '@material-ui/core/Button'
 
 //props = project component
 function CreateTicket(props) {
@@ -13,17 +14,10 @@ function CreateTicket(props) {
     const [ticketDescription, setTicketDescription] = useState("");
     const [formState, setFormState] = useState(false);
     const [name, setName] = useState("")
-    // const createTicket = (event) => {
-    //     event.preventDefault();
-    //     setTickets([...tickets, ticketDescription])
-    //     setTicketDescription("");
-    // }
+   
 
 
     const param = useParams();
-
-    // console.log(param);
-
 
     const createTicket = (event) => {
         event.preventDefault();
@@ -35,7 +29,6 @@ function CreateTicket(props) {
                     ticketDescription: ticketDescription,
                     dateCreated: firebase.firestore.FieldValue.serverTimestamp()
                 })
-                // console.log(projName)
             }
             )).then(() =>
                 setFormState(!formState))
@@ -63,9 +56,9 @@ function CreateTicket(props) {
                 </p>
 
                 <Link to={`/ticket/${param.projectId}`}>
-                    <button type="submit" onClick={createTicket}>
+                    <Button variant ="contained" color="primary" type="submit" onClick={createTicket}>
                         Create Ticket
-            </button>
+            </Button>
                 </Link>
             </form>
             {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />}
