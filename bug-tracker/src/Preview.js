@@ -1,38 +1,49 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
+import Grid from '@material-ui/core/Grid';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import { grey } from '@material-ui/core/colors';
+import { grey, } from '@material-ui/core/colors';
+import { Link } from "react-router-dom";
 
-const useStyles = makeStyles({
+const primary100 = grey["100"];
+const fontPrimary = grey["900"];
+const useStyles = makeStyles((theme) => ({
     root: {
-        width: 275,
+        width: 170,
+        height: 70,
+        marginTop: 30,
         marginBottom: 12,
-        marginLeft: 12,
-
+        backgroundColor: primary100,
+        color: fontPrimary,
+        alignContent: 'center',
     },
     title: {
         fontSize: 14,
     },
-    pos: {
-        marginBottom: 12,
-    },
-});
+    cardProp: {
+        padding: theme.spacing(2),
+    }
+}));
+
 
 // to remove underline on link: style={{ textDecoration: 'none' }}
 export default function Preview(props) {
     const classes = useStyles();
     return (
-        <Card className={classes.root} variant="outlined" raised="true">
-            <CardContent>
-                <Typography variant="h5" component="h1">
-                    {props.name}
-                </Typography>
-            </CardContent>
-        </Card>
+        <Grid container justify="center" spacing={3}>
+
+            <Card className={classes.root} variant="outlined" raised="true">
+                <Link to={`/projects/${props.id}`} style={{ textDecoration: 'none' }}>
+                    <CardContent>
+                        <Typography variant="h5" component="h1">
+                            {props.name}
+                        </Typography>
+                    </CardContent>
+                </Link>
+            </Card>
+        </Grid>
 
     )
 }
