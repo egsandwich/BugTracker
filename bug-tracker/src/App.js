@@ -1,6 +1,5 @@
 import React from "react";
 import "./App.css";
-
 import Contact from "./Contact";
 import Login from "./Login";
 import Dasboard from "./Dashboard";
@@ -10,28 +9,36 @@ import CreateTicket from "./CreateTicket";
 import Dashboard from "./Dashboard";
 import Project from "./Project";
 import TicketList from "./TicketList";
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import {
+  makeStyles, AppBar, Toolbar, Typography, Grid, Drawer, List,
+  Button, ListItem, ListItemIcon, ListItemText
+} from '@material-ui/core/';
+// import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
 import AddIcon from '@material-ui/icons/Add'; //change to something else icon
+import MenuIcon from '@material-ui/icons/Menu';
 
-//dashboard
-//more views i guess
 
 const useStyles = makeStyles({
+  root: {
+    textAlign: 'center',
+    width: '100%',
+    height: '100%',
+  },
   list: {
     width: 250,
   },
-  fullList: {
-    width: 'auto',
+  title: {
+    flex: 1
   },
+  grid: {
+    width: '100%',
+    height: '10%'
+  }
 });
+
+//dashboard
+//more views i guess
 function App() {
   //in use effect for the future, check if logged in
 
@@ -39,6 +46,8 @@ function App() {
   //put condition here
   //]); //run code in a condition in react
   //UI
+
+
   const classes = useStyles();
   const [state, setState] = React.useState(false);
 
@@ -53,12 +62,13 @@ function App() {
   const list = (
     <div
       className={classes.list}
-      //     [classes.fullList]: anchor === 'top' || anchor === 'bottom',
-      // })}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
+      {/* put back button instead to close drawer */}
+      <HomeIcon />
+
       <List>
         <Link to="/" style={{ textDecoration: 'none' }}>
           <ListItem button>
@@ -72,12 +82,6 @@ function App() {
             <ListItemText primary="Add project" />
           </ListItem>
         </Link>
-        {/* {['Home', 'Profile'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))} */}
       </List>
     </div>
   );
@@ -86,10 +90,20 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <Link to="/" style={{ textDecoration: 'none' }}><HomeIcon /></Link>
-        <Button onClick={toggleDrawer(true)}>Menu
-            </Button>
+      <div className={classes.root}>
+        <Grid className={classes.grid}>
+          <AppBar position="static">
+            <Toolbar>
+              <MenuIcon onClick={toggleDrawer(true)} />
+              <Typography variant="h3" className={classes.title}>
+                <Link to="/" style={{ textDecoration: 'none' }}>Bug Tracker</Link>
+                {/* Bug Tracker */}
+              </Typography>
+
+            </Toolbar>
+          </AppBar>
+        </Grid>
+
 
         <Drawer anchor='left' open={state} onClose={toggleDrawer(false)}>{list}</Drawer>
         {/* <nav> */}
@@ -115,14 +129,14 @@ function App() {
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/projects/:projectId" component={Project} />
+          <Route path="/tickets/:projectId" component={Project} />
           <Route path="/login" component={Login} />
           <Route path="/registerProject" component={CreateProject} />
           <Route path="/:projectId/registerTicket" component={CreateTicket} />
-          {/* <Route path="/tickets/:projectId" component={TicketList} /> */}
           <Route path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
-
+        {/* bottom nav */}
       </div>
     </Router>
   );

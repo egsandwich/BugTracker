@@ -11,20 +11,14 @@ const primary100 = grey["100"];
 const fontPrimary = grey["900"];
 const useStyles = makeStyles((theme) => ({
     root: {
-        width: 170,
-        height: 70,
-        marginTop: 30,
-        marginBottom: 12,
         backgroundColor: primary100,
-        color: fontPrimary,
-        alignContent: 'center',
+        padding: theme.spacing(2),
+        margin: theme.spacing(3),
+        height: '4em',
     },
     title: {
-        fontSize: 14,
+        fontSize: 20,
     },
-    cardProp: {
-        padding: theme.spacing(2),
-    }
 }));
 
 
@@ -32,18 +26,16 @@ const useStyles = makeStyles((theme) => ({
 export default function Preview(props) {
     const classes = useStyles();
     return (
-        <Grid container justify="center" spacing={3}>
 
-            <Card className={classes.root} variant="outlined" raised="true">
-                <Link to={`/projects/${props.id}`} style={{ textDecoration: 'none' }}>
-                    <CardContent>
-                        <Typography variant="h5" component="h1">
-                            {props.name}
-                        </Typography>
-                    </CardContent>
-                </Link>
-            </Card>
-        </Grid>
+        <Card className={classes.root} variant="outlined" raised="true">
+            <Link to={`/projects/${props.id}`} style={{ textDecoration: 'none' }}>
+                <CardContent>
+                    <Typography variant="h5" component="h1" className={classes.title} noWrap="true">
+                        {props.name}
+                    </Typography>
+                </CardContent>
+            </Link>
+        </Card>
 
     )
 }
