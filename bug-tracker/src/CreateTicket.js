@@ -14,7 +14,7 @@ function CreateTicket(props) {
     const [ticketDescription, setTicketDescription] = useState("");
     const [formState, setFormState] = useState(false);
     const [name, setName] = useState("")
-   
+
 
 
     const param = useParams();
@@ -56,7 +56,7 @@ function CreateTicket(props) {
                 </p>
 
                 <Link to={`/ticket/${param.projectId}`}>
-                    <Button variant ="contained" color="primary" type="submit" onClick={createTicket}>
+                    <Button variant="contained" color="primary" type="submit" onClick={createTicket}>
                         Create Ticket
             </Button>
                 </Link>
