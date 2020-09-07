@@ -1,17 +1,17 @@
 import React from "react";
 import "./App.css";
-import Contact from "./Contact";
+import Contact from "./components/Contact";
 import Login from "./Login";
 import Dasboard from "./Dashboard";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-import CreateProject from "./CreateProject";
-import CreateTicket from "./CreateTicket";
+import CreateProject from "./components/CreateProject";
+import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./Dashboard";
 import Project from "./Project";
 import TicketList from "./TicketList";
 import {
   makeStyles, AppBar, Toolbar, Typography, Grid, Drawer, List,
-  Button, ListItem, ListItemIcon, ListItemText
+  ListItem, ListItemIcon, ListItemText, Link as LinkUI
 } from '@material-ui/core/';
 // import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
@@ -26,7 +26,11 @@ const useStyles = makeStyles({
     height: '100%',
   },
   list: {
-    width: 250,
+    width: 200,
+  },
+  gridList: {
+    height: '90%',
+    alignItems: 'flex-start',
   },
   title: {
     flex: 1
@@ -34,7 +38,10 @@ const useStyles = makeStyles({
   grid: {
     width: '100%',
     height: '10%'
-  }
+  },
+  linkStyle: {
+    color: 'white',
+  },
 });
 
 //dashboard
@@ -60,30 +67,31 @@ function App() {
   };
 
   const list = (
-    <div
-      className={classes.list}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      {/* put back button instead to close drawer */}
-      <HomeIcon />
+    <Grid className={classes.gridList}>
+      <div
+        className={classes.list}
+        role="presentation"
+        onClick={toggleDrawer(false)}
+        onKeyDown={toggleDrawer(false)}
+      >
 
-      <List>
-        <Link to="/" style={{ textDecoration: 'none' }}>
-          <ListItem button>
-            <ListItemIcon><HomeIcon /></ListItemIcon>
-            <ListItemText primary="Home" />
-          </ListItem>
-        </Link>
-        <Link to="/registerProject" style={{ textDecoration: 'none' }}>
-          <ListItem button>
-            <ListItemIcon><AddIcon /></ListItemIcon>
-            <ListItemText primary="Add project" />
-          </ListItem>
-        </Link>
-      </List>
-    </div>
+
+        <List>
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon><HomeIcon /></ListItemIcon>
+              <ListItemText primary="Home" />
+            </ListItem>
+          </Link>
+          <Link to="/registerProject" style={{ textDecoration: 'none' }}>
+            <ListItem button>
+              <ListItemIcon><AddIcon /></ListItemIcon>
+              <ListItemText primary="Add project" />
+            </ListItem>
+          </Link>
+        </List>
+      </div>
+    </Grid>
   );
 
 
@@ -96,8 +104,11 @@ function App() {
             <Toolbar>
               <MenuIcon onClick={toggleDrawer(true)} />
               <Typography variant="h3" className={classes.title}>
-                <Link to="/" style={{ textDecoration: 'none' }}>Bug Tracker</Link>
-                {/* Bug Tracker */}
+                <Link to="/" style={{ textDecoration: 'none' }} >
+                  <LinkUI className={classes.linkStyle} underline='none'>
+                    Bug Tracker
+              </LinkUI>
+                </Link>
               </Typography>
 
             </Toolbar>
@@ -106,24 +117,7 @@ function App() {
 
 
         <Drawer anchor='left' open={state} onClose={toggleDrawer(false)}>{list}</Drawer>
-        {/* <nav> */}
-
-        {/* <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact</Link>
-            </li>
-            <li>
-              <Link to="/registerProject">Create</Link>
-            </li>
-          </ul>
-
-        </nav> */}
+        {/* <Drawer anchor='left' variant='permanent'>{list}</Drawer> */}
 
         {/* if logged in show dashboard */}
         <Switch>

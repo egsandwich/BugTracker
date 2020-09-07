@@ -3,7 +3,8 @@ import Preview from "./Preview";
 import db from "./firebase";
 import { Grid, Typography, Paper, Card, Button } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-
+import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 function Dashboard() {
     //backend
@@ -33,6 +34,7 @@ function Dashboard() {
         gridHeader: {
             width: '100%',
             height: '3%',
+            margin: theme.spacing(1)
         }
     }))
     const classes = useStyles();
@@ -40,9 +42,13 @@ function Dashboard() {
     return (
         <div>
             <Grid className={classes.gridHeader}>
-                <Typography variant="h4">Dashboard</Typography>
+                <Grid container spacing={2}>
+                    {/* put with grid items */}
+                    <Grid item><Typography variant="h4" align='left'>Projects</Typography></Grid>
+                    <Grid item> <AddCircleOutlineTwoToneIcon fontSize='large' component={<Link to="/registerProject" style={{ textDecoration: 'none' }} />} /> </Grid>
+                </Grid>
             </Grid>
-            < Grid className={classes.gridList} spacing={2}>
+            < Grid className={classes.gridList}>
                 <Grid container spacing={0}>
                     {
                         projects.map((project) => (
