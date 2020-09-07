@@ -15,7 +15,6 @@ function Project(props) {
   const [tickets, setTickets] = useState([]);
 
   const params = useParams();
-  // console.log(params.projectId)
 
 
   useEffect(() => {
@@ -46,7 +45,6 @@ function Project(props) {
   function saveProjectName(a) {
     setNameOfProj(a.data().projectName)
     setNameOfOwner(a.data().projectOwner)
-    console.log(props.projectOwner)
   }
 
 
@@ -94,11 +92,6 @@ function Project(props) {
           ))
           }
         </Grid>
-
-        {/* pass in an object */}
-
-
-        {/*{props.owner}*/}
       </Grid>
     </div >
   );
