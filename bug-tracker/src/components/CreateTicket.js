@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import db from "./firebase";
 import firebase from 'firebase';
 import { Redirect, useParams, Route, Link } from "react-router-dom";
-import Button from '@material-ui/core/Button'
+import { makeStyles } from '@material-ui/core/styles';
+import FilledInput from '@material-ui/core/FilledInput';
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 //props = project component
 function CreateTicket(props) {
@@ -46,20 +55,18 @@ function CreateTicket(props) {
 
     return (
         <div>
-            <h1> Reg Ticket</h1>
+            <Typography variant="h3">Add ticket</Typography>
             <form>
-                <p>
-                    <input
+                <FormControl>
+                    <InputLabel>Description</InputLabel>
+                    <Input id="component-simple"
                         value={ticketDescription}
                         onChange={(event) => setTicketDescription(event.target.value)}
                     />
-                </p>
-
-                <Link to={`/ticket/${param.projectId}`}>
-                    <Button variant="contained" color="primary" type="submit" onClick={createTicket}>
-                        Create Ticket
+                </FormControl>
+                <Button variant="contained" type="submit" onClick={createTicket}>
+                    Create Ticket
             </Button>
-                </Link>
             </form>
             {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />}
         </div >
