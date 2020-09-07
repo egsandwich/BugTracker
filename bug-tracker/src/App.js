@@ -1,14 +1,12 @@
 import React from "react";
 import "./App.css";
 import Contact from "./components/Contact";
-import Login from "./Login";
-import Dasboard from "./Dashboard";
+import Login from "./components/Login";
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import CreateProject from "./components/CreateProject";
 import CreateTicket from "./components/CreateTicket";
-import Dashboard from "./Dashboard";
-import Project from "./Project";
-import TicketList from "./TicketList";
+import Dashboard from "./components/Dashboard";
+import Project from "./components/Project";
 import {
   makeStyles, AppBar, Toolbar, Typography, Grid, Drawer, List,
   ListItem, ListItemIcon, ListItemText, Link as LinkUI

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Preview from "./Preview";
 import db from "./firebase";
-import { Grid, Typography, Paper, Card, Button } from '@material-ui/core'
+import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
@@ -45,7 +45,14 @@ function Dashboard() {
                 <Grid container spacing={2}>
                     {/* put with grid items */}
                     <Grid item><Typography variant="h4" align='left'>Projects</Typography></Grid>
-                    <Grid item> <AddCircleOutlineTwoToneIcon fontSize='large' component={<Link to="/registerProject" style={{ textDecoration: 'none' }} />} /> </Grid>
+                    {/* component={<Link to="/registerProject" */}
+                    <Grid item>
+                        <Link to="/registerProject">
+                            <LinkUI color="primary">
+                                <AddCircleOutlineTwoToneIcon fontSize='large' style={{ textDecoration: 'none' }} />
+                            </LinkUI>
+                        </Link>
+                    </Grid>
                 </Grid>
             </Grid>
             < Grid className={classes.gridList}>
