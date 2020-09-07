@@ -9,7 +9,7 @@ import Dashboard from "./components/Dashboard";
 import Project from "./components/Project";
 import {
   makeStyles, AppBar, Toolbar, Typography, Grid, Drawer, List,
-  ListItem, ListItemIcon, ListItemText, Link as LinkUI
+  ListItem, ListItemIcon, ListItemText, Link as LinkUI, Container
 } from '@material-ui/core/';
 // import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
@@ -17,7 +17,7 @@ import AddIcon from '@material-ui/icons/Add'; //change to something else icon
 import MenuIcon from '@material-ui/icons/Menu';
 
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(theme => ({
   root: {
     textAlign: 'center',
     width: '100%',
@@ -40,7 +40,13 @@ const useStyles = makeStyles({
   linkStyle: {
     color: 'white',
   },
-});
+  footer: {
+    padding: theme.spacing(3, 2),
+    margintTop: 'auto',
+
+  },
+
+}));
 
 //dashboard
 //more views i guess
@@ -129,6 +135,11 @@ function App() {
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
         {/* bottom nav */}
+        {/* <footer className={classes.footer}>
+          <Container maxWidth="sm">
+            <Typography variant="body2">  {'Copyright © '} </Typography>
+          </Container>
+        </footer> */}
       </div>
     </Router>
   );
