@@ -13,7 +13,8 @@ import {
 } from '@material-ui/core/';
 // import Divider from '@material-ui/core/Divider';
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
-import AddIcon from '@material-ui/icons/Add'; //change to something else icon
+// import AddIcon from '@material-ui/icons/Add'; //change to something else icon
+import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOutlined';
 import MenuIcon from '@material-ui/icons/Menu';
 
 

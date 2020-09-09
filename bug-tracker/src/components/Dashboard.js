@@ -3,7 +3,8 @@ import Preview from "./Preview";
 import db from "./firebase";
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
+// import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
+import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 function Dashboard() {
@@ -49,7 +50,7 @@ function Dashboard() {
                     <Grid item>
                         <Link to="/registerProject">
                             <LinkUI color="primary">
-                                <AddCircleOutlineTwoToneIcon fontSize='large' style={{ textDecoration: 'none' }} />
+                                <AddCircleOutlinedIcon fontSize='large' style={{ textDecoration: 'none' }} />
                             </LinkUI>
                         </Link>
                     </Grid>

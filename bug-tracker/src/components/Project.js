@@ -4,7 +4,8 @@ import firebase from 'firebase';
 import { withRouter, useParams, Link } from "react-router-dom";
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
+// import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
+import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import Ticket from "./Ticket";
 
 
@@ -78,7 +79,7 @@ function Project(props) {
           <Grid item>
             <Link to={`/${params.projectId}/registerTicket`}>
               <LinkUI color="primary">
-                <AddCircleOutlineTwoToneIcon fontSize='large' style={{ textDecoration: 'none' }} />
+                <AddCircleOutlinedIcon fontSize='large' style={{ textDecoration: 'none' }} />
               </LinkUI>
             </Link>
           </Grid>
