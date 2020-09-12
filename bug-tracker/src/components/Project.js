@@ -73,7 +73,7 @@ function Project(props) {
   }
   return (
     <div>
-      <Grid className={classes.gridHeader}>
+      {/* <Grid className={classes.gridHeader}>
         <Grid container spacing={2}>
           <Grid item><Typography variant="h4">Tickets on {nameOfProj} </Typography></Grid>
           <Grid item>
@@ -93,7 +93,8 @@ function Project(props) {
           ))
           }
         </Grid>
-      </Grid>
+      </Grid> */}
+      Projects
     </div >
   );
 }

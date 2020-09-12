@@ -12,9 +12,10 @@ const fontPrimary = grey["900"];
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.primary.main,
-        padding: theme.spacing(2),
         margin: theme.spacing(2),
-        height: '4em',
+        minWidth: 100,
+        height: 'auto',
+        alignContent: 'center'
         // color: theme.palette.primary.main
     },
     title: {
@@ -32,13 +33,15 @@ export default function Preview(props) {
             <Link to={`/projects/${props.id}`} style={{ textDecoration: 'none' }}>
                 <Card className={classes.root} variant="outlined" raised="true">
                     <CardContent>
-                        <Typography variant="h5" component="h1" className={classes.title} noWrap="true">
+                        <Typography variant="h6" className={classes.title} noWrap="true">
                             {props.name}
+                        </Typography>
+                        <Typography variant="body2" noWrap="true">
+                            Admin: {props.owner}
                         </Typography>
                     </CardContent>
                 </Card>
             </Link>
         </LinkUI>
-
     )
 }

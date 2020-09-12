@@ -55,7 +55,7 @@ function CreateTicket(props) {
 
     return (
         <div>
-            <Typography variant="h3">Add ticket</Typography>
+            {/* <Typography variant="h3">Add ticket</Typography>
             <form>
                 <FormControl>
                     <InputLabel>Description</InputLabel>
@@ -68,7 +68,8 @@ function CreateTicket(props) {
                     Create Ticket
             </Button>
             </form>
-            {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />}
+            {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />} */}
+            Create ticket
         </div >
     );
 }
