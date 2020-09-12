@@ -54,7 +54,8 @@ function CreateProject(props) {
     // console.log(dashState);
     return (
         <div>
-            <Grid>
+            Create project
+            {/* <Grid>
                 <Grid container>
                     <Typography variant="h4">Add project </Typography>
                 </Grid>
@@ -77,7 +78,6 @@ function CreateProject(props) {
                             />
                         </FormControl>
                     </Grid>
-                    {/* <FormControl> */}
                     <Grid container>
                         <Button variant="contained" type="submit" onClick={createProject}>
                             Create Project
@@ -86,7 +86,7 @@ function CreateProject(props) {
 
                 </form>
             </Grid>
-            {dashState ? <Redirect to='/' /> : <Route path='/registerProject' />}
+            {dashState ? <Redirect to='/' /> : <Route path='/registerProject' />} */}
         </div >
     );
 }

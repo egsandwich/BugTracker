@@ -26,12 +26,12 @@ function Ticket(props) {
     console.log(props);
     return (
         <div>
-            <Card className={classes.root}>
+            {/* <Card className={classes.root}>
                 <Typography variant="h5" component="h1" className={classes.title} noWrap="true">
                     {props.description}
-                    {/* {props.name} */}
                 </Typography>
-            </Card>
+            </Card> */}
+            Ticket
         </div>
     )
 }
