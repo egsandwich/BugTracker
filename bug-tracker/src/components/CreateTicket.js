@@ -19,7 +19,15 @@ function CreateTicket(props) {
     // }
     {/*EDIT THIS OUT */ }
     // function CreateTicket() {
-    const [tickets, setTickets] = useState(["Theres a bug on line 18", "Tomorrow    "]);
+    const [tickets, setTickets] = useState([{
+        ticketTitle: "title",
+        ticketDescription: "description",
+        ticketType: "Error/Bug",
+        ticketStatus: "Open"
+    },]);
+    const [ticketType, setTicketType] = useState("Bug/Error");
+    const [ticketStatus, setTicketStatus] = useState("Open");
+    const [ticketTitle, setTicketTitle] = useState();
     const [ticketDescription, setTicketDescription] = useState("");
     const [formState, setFormState] = useState(false);
     const [name, setName] = useState("")
@@ -30,31 +38,66 @@ function CreateTicket(props) {
 
     const createTicket = (event) => {
         event.preventDefault();
-        db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', param.projectId)
-            .get().then(snapshot => snapshot.docs.forEach(doc => {
-                var projName = doc.data().projectName;
-                setName(projName)
-                doc.ref.collection("_tickets").add({
-                    ticketDescription: ticketDescription,
-                    dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-                })
-            }
-            )).then(() =>
-                setFormState(!formState))
+        // db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', param.projectId)
+        //     .get().then(snapshot => snapshot.docs.forEach(doc => {
+        //         var projName = doc.data().projectName;
+        //         setName(projName)
+        //         doc.ref.collection("_tickets").add({
+        //             ticketDescription: ticketDescription,
+        //             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
+        //         })
+        //     }
+        //     )).then(() =>
+        //         setFormState(!formState))
+        db.collection("_tickets").add({
+            ticketTitle: ticketTitle,
+            ticketDescription: ticketDescription,
+            ticketType: ticketType,
+            ticketStatus: ticketStatus,
+            dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+            project: param.projectId,
+        })
+
+        setTicketTitle("");
         setTicketDescription("");
     }
 
+    // const createTicket = (event) => {
+    //     event.preventDefault();
+    //     setTickets([...tickets, {
+    //         ticketTitle: ticketTitle,
+    //         ticketDescription: ticketDescription,
+    //         ticketType: ticketType,
+    //         ticketStatus: ticketStatus
+    //     },])
+    // }
 
-    {/*
-        create a collection from the project document 
-        try to automate na yung name of the ticket collection would be nameofproject append tickets
-        then redirect to project container updated with the ticket
-    */}
-
-
+    console.log(tickets)
 
     return (
         <div>
+            <form>
+                <label>Title</label>
+                <input type="text" value={ticketTitle} onChange={(event) => setTicketTitle(event.target.value)} />
+                <label> Description</label>
+                <input type="text" value={ticketDescription} onChange={(event) => setTicketDescription(event.target.value)} />
+                <label>Type</label>
+                <select value={ticketType} onChange={(event) => setTicketType(event.target.value)}>
+                    <option selected value="Bug/Error">Bug/Error</option>
+                    <option value="Request">Request</option>
+                </select>
+                <label>Status</label>
+                <select value={ticketStatus} onChange={(event) => setTicketStatus(event.target.value)}>
+                    <option selected value="Open">Open</option>
+                    <option value="In progress">In progress</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <button type="submit" onClick={createTicket}>
+                    Create Ticket
+            </button>
+            </form>
+
+
             {/* <Typography variant="h3">Add ticket</Typography>
             <form>
                 <FormControl>
@@ -69,7 +112,17 @@ function CreateTicket(props) {
             </Button>
             </form>
             {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />} */}
-            Create ticket
+            {tickets.map((ticket) => (
+                <div>
+                    <p> title: {ticket.ticketTitle}</p>
+                    <p>description: {ticket.ticketDescription} </p>
+                    <p> type: {ticket.ticketType} </p>
+                    <p>status: {ticket.ticketStatus} </p>
+                </div>
+
+            )
+
+            )}
         </div >
     );
 }
