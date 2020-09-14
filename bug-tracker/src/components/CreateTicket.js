@@ -17,20 +17,21 @@ import Grid from '@material-ui/core/Grid';
 function CreateTicket(props) {
     //     const
     // }
-    {/*EDIT THIS OUT */ }
+    /*EDIT THIS OUT */
     // function CreateTicket() {
     const [tickets, setTickets] = useState([{
         ticketTitle: "title",
         ticketDescription: "description",
         ticketType: "Error/Bug",
-        ticketStatus: "Open"
+        ticketStatus: "Open",
+        ticketPriority: "High",
     },]);
     const [ticketType, setTicketType] = useState("Bug/Error");
     const [ticketStatus, setTicketStatus] = useState("Open");
     const [ticketTitle, setTicketTitle] = useState();
     const [ticketDescription, setTicketDescription] = useState("");
+    const [ticketPriority, setTicketPriority] = useState("Low");
     const [formState, setFormState] = useState(false);
-    const [name, setName] = useState("")
 
 
 
@@ -54,12 +55,16 @@ function CreateTicket(props) {
             ticketDescription: ticketDescription,
             ticketType: ticketType,
             ticketStatus: ticketStatus,
+            ticketPriority: ticketPriority,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             project: param.projectId,
-        })
-
+        }).then(() =>
+            setFormState(!formState));
         setTicketTitle("");
         setTicketDescription("");
+
+
+
     }
 
     // const createTicket = (event) => {
@@ -72,7 +77,6 @@ function CreateTicket(props) {
     //     },])
     // }
 
-    console.log(tickets)
 
     return (
         <div>
@@ -92,6 +96,12 @@ function CreateTicket(props) {
                     <option value="In progress">In progress</option>
                     <option value="Resolved">Resolved</option>
                 </select>
+                <label>Priority</label>
+                <select value={ticketPriority} onChange={(event) => setTicketPriority(event.target.value)}>
+                    <option selected value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
                 <button type="submit" onClick={createTicket}>
                     Create Ticket
             </button>
@@ -110,9 +120,8 @@ function CreateTicket(props) {
                 <Button variant="contained" type="submit" onClick={createTicket}>
                     Create Ticket
             </Button>
-            </form>
-            {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />} */}
-            {tickets.map((ticket) => (
+            </form>*/
+            /* {tickets.map((ticket) => (
                 <div>
                     <p> title: {ticket.ticketTitle}</p>
                     <p>description: {ticket.ticketDescription} </p>
@@ -123,8 +132,12 @@ function CreateTicket(props) {
             )
 
             )}
+        
+            ); */}
+            {/* redirect to ticket summary? */}
+            { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />}
         </div >
-    );
+    )
 }
 
 export default CreateTicket;
