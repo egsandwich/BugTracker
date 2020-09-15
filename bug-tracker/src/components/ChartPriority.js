@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import db from "./firebase";
+import firebase from "./firebase";
 
 
 
@@ -9,7 +9,7 @@ function ChartPriority() {
     const [highCount, setHighCount] = useState(0);
 
     useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'High')
+        firebase.db.collection('_tickets').where("ticketPriority", "==", 'High')
             .get()
             .then(snapshot => {
                 snapshot.docs.map(doc => {
@@ -21,7 +21,7 @@ function ChartPriority() {
     }, [])
 
     useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Medium')
+        firebase.db.collection('_tickets').where("ticketPriority", "==", 'Medium')
             .get()
             .then(snapshot => {
                 snapshot.docs.map(doc => {
@@ -33,7 +33,7 @@ function ChartPriority() {
     }, [])
 
     useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Low')
+        firebase.db.collection('_tickets').where("ticketPriority", "==", 'Low')
             .get()
             .then(snapshot => {
                 snapshot.docs.map(doc => {
