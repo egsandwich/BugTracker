@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
@@ -8,6 +8,7 @@ import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./components/Dashboard";
 import Drawer from "./components/Drawer";
 import Project from "./components/Project";
+import Signup from "./components/Signup";
 import NavBar from "./components/NavBar";
 import {
   makeStyles, xToolbar, Typography, Grid, List,
@@ -20,6 +21,7 @@ import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOu
 import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
+import firebase from './components/firebase'
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -111,23 +113,28 @@ const useStyles = makeStyles(theme => ({
 function App() {
   //in use effect for the future, check if logged in
 
-  //useEffect(() => {}, [
-  //put condition here
-  //]); //run code in a condition in react
+  useEffect(() => {
+    firebase.isInitialized().then(val => {
+      setFirebaseInitialized(val)
+    })
+  },
+    []); //run code in a condition in react
   //UI
 
 
   const classes = useStyles();
   const theme = useTheme();
 
+  const [firebaseInitialized, setFirebaseInitialized] = useState(false)
 
-  return (
+  return firebaseInitialized !== false ? (
     <Router>
       <CssBaseline /> {/*removes default padding */}
       {/* if logged in show dashboard */}
       <NavBar />
       <Switch>
         <Route path="/contact" component={Contact} />
+        <Route path="/signup" component={Signup} />
         <Route path="/projects/:projectId" component={Project} />
         <Route path="/tickets/:projectId" component={Project} />
         <Route path="/login" component={Login} />
@@ -144,7 +151,7 @@ function App() {
           </Container>
         </footer> */}
     </Router >
-  );
+  ) : <div>Loading</div>
 }
 
 export default App;
