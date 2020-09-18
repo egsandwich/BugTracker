@@ -7,42 +7,36 @@ function ChartPriority() {
     const [lowCount, setLowCount] = useState(0);
     const [mediumCount, setMediumCount] = useState(0);
     const [highCount, setHighCount] = useState(0);
+    const db = firebase.firestore();
+    const [temp, setTemp] = useState([])
 
     useEffect(() => {
-        firebase.db.collection('_tickets').where("ticketPriority", "==", 'High')
+        db.collection('_tickets').where("ticketPriority", "==", 'High')
             .get()
             .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setHighCount(highCount + 1);
 
-                }
-                )
+                setHighCount(snapshot.size)
             })
     }, [])
 
     useEffect(() => {
-        firebase.db.collection('_tickets').where("ticketPriority", "==", 'Medium')
+        db.collection('_tickets').where("ticketPriority", "==", 'Medium')
             .get()
             .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setMediumCount(mediumCount + 1);
+                setMediumCount(snapshot.size);
 
-                }
-                )
+
             })
     }, [])
 
     useEffect(() => {
-        firebase.db.collection('_tickets').where("ticketPriority", "==", 'Low')
+        db.collection('_tickets').where("ticketPriority", "==", 'Low')
             .get()
             .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setLowCount(lowCount + 1);
-
-                }
-                )
+                setLowCount(snapshot.size)
             })
     }, [])
+    // console.log(temp.length)
 
     return (
         <div>
