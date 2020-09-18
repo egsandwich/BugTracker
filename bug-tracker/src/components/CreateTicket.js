@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import db from "./firebase";
-import firebase from 'firebase';
-import { Redirect, useParams, Route, Link } from "react-router-dom";
+import firebase from "./firebase";
+import {
+    Redirect, useParams, Route, Link, withRouter
+} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
@@ -36,6 +37,7 @@ function CreateTicket(props) {
 
 
     const param = useParams();
+    const db = firebase.firestore();
 
     const createTicket = (event) => {
         event.preventDefault();
@@ -62,6 +64,7 @@ function CreateTicket(props) {
             setFormState(!formState));
         setTicketTitle("");
         setTicketDescription("");
+        props.history.push('/')
 
 
 
@@ -135,9 +138,9 @@ function CreateTicket(props) {
         
             ); */}
             {/* redirect to ticket summary? */}
-            { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />}
+            {/* { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />} */}
         </div >
     )
 }
 
-export default CreateTicket;
+export default withRouter(CreateTicket);

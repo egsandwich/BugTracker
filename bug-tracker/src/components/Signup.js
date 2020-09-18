@@ -3,7 +3,7 @@ import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
 
 
-function Signup() {
+function Signup(props) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -12,15 +12,20 @@ function Signup() {
         email: "email@email.com",
     },]);
 
-    async function onRegister() {
-        console.log("clicked")
-        try {
-            await firebase.register(name, email, password)
-            this.props.history.replace('/');
-        } catch (error) {
-            alert(error.message)
-        }
+    const onRegister = () => {
+        props.history.push('login')
     }
+    // const onRegister = () => {
+    //     console.log("clicked")
+    //     history.push('/')
+    // }
+    // try {
+    //     await firebase.register(name, email, password)
+    //     props.history.replace('/');
+    // } catch (error) {
+    //     alert(error.message)
+    // }
+
 
     // const onRegister = (event) => {
     //     event.preventDefault();
@@ -38,7 +43,7 @@ function Signup() {
                 <p> <label>Email:</label> </p>
                 <p> <input value={email} onChange={(event) => setEmail(event.target.value)} />  </p>
                 <p> <label>Password:</label> </p>
-                <p> <input value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
+                <p> <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
                 <p><button type="submit" onClick={onRegister}>Sign up</button></p>
             </form>
             {/* {persons.map((person) => (

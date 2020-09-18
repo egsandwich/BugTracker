@@ -8,12 +8,13 @@ const useStyles = makeStyles(theme => ({
         marginTop: "8px"
     }
 }))
-function Header() {
+function Header(props) {
     const classes = useStyles();
     return (
         <Box>
             <Typography variant="h5" className={classes.margins}>
-                Dashboard
+                <p>Dashboard</p>
+                <p>Welcome, {props.username} </p>
             </Typography>
 
         </Box>

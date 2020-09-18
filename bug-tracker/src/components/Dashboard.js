@@ -13,12 +13,12 @@ import ChartPriority from "./ChartPriority";
 function Dashboard(props) {
     //backend
 
-    console.log(firebase.getCurrentUsername())
-    if (!firebase.getCurrentUsername()) {
-        alert('Please login first')
-        props.history.replace('login')
-        return null
-    }
+    // console.log(firebase.getCurrentUsername())
+    // if (!firebase.getCurrentUsername()) {
+    //     alert('Please login first')
+    //     props.history.replace('login')
+    //     return null
+    // }
 
     // useEffect(() => {
     //     firebase.getCurrentUsername
@@ -69,7 +69,7 @@ function Dashboard(props) {
             )} */}
             <ChartPriority />
             <div>
-                <button>Logout</button>
+                <button >Logout</button>
             </div>
         </Box>
     );
