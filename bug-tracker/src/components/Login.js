@@ -1,29 +1,29 @@
-import React, { useState, useCallback } from "react";
-import { Link, withRouter } from 'react-router-dom'
+import React, { useState, useCallback, useContext } from "react";
+import { withRouter } from 'react-router-dom'
 import firebase from './firebase'
+import { AuthContext } from './Auth'
 
 function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const login = () => {
-        props.history.push('/');
-    }
 
-    // const login = useCallback(
-    //     async event => {
-    //         event.preventDefault();
-    //         try {
-    //             await firebase.login(email, password)
-    //             console.log(email)
-    //             history.push('/')
-    //         } catch (error) {
-    //             alert(error.message)
-    //         }
-    //     },
-    //     [history],
-    // );
 
+    const login = useCallback(
+        async event => {
+            event.preventDefault();
+            try {
+                await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password);
+                props.history.push('/')
+            } catch (error) {
+                alert(error);
+            }
+        }
+    );
+
+    const { currentUser } = useContext(AuthContext);
 
     return (
         <div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Preview from "./Preview";
 import NavBar from "./NavBar";
 import Header from "./Header";
@@ -9,6 +9,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import { BrowserRouter as Router, Switch, Route, Link, withRouter } from 'react-router-dom';
 import ChartPriority from "./ChartPriority";
+import { AuthContext } from "./Auth";
 
 function Dashboard(props) {
     //backend
@@ -49,9 +50,11 @@ function Dashboard(props) {
     // }))
     // const classes = useStyles();
     // const theme = useTheme();
+
+    const { currentUser } = useContext(AuthContext)
     return (
         <Box>
-            <Header />
+            <Header username={currentUser.displayName} />
             {/* {tickets.map((ticket) => (
                 <div>
                     <p> title: {ticket.ticketTitle}</p>

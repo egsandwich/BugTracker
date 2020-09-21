@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import firebase from './firebase'
 import { withRouter } from 'react-router-dom'
 
@@ -12,28 +12,20 @@ function Signup(props) {
         email: "email@email.com",
     },]);
 
-    const onRegister = () => {
-        props.history.push('login')
-    }
-    // const onRegister = () => {
-    //     console.log("clicked")
-    //     history.push('/')
-    // }
-    // try {
-    //     await firebase.register(name, email, password)
-    //     props.history.replace('/');
-    // } catch (error) {
-    //     alert(error.message)
-    // }
+    const onRegister = useCallback(async event => {
+        event.preventDefault();
+        try {
+            await firebase
+                .auth()
+                .createUserWithEmailAndPassword(email, password)
+            props.history.push('/login')
 
+        } catch (error) {
+            alert(error);
+        }
 
-    // const onRegister = (event) => {
-    //     event.preventDefault();
-    //     setPersons([...persons, {
-    //         name: name,
-    //         email: email
-    //     }])
-    // }
+    })
+
 
     return (
         <div>
