@@ -60,11 +60,14 @@ function CreateTicket(props) {
             ticketPriority: ticketPriority,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             project: param.projectId,
-        }).then(() =>
-            setFormState(!formState));
-        setTicketTitle("");
-        setTicketDescription("");
-        props.history.push('/')
+        }).then(() => {
+            setFormState(!formState)
+            setTicketTitle("")
+            setTicketDescription("")
+            props.history.push('/')
+
+        }); //catch error?
+
 
 
 
