@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import firebase from "./firebase";
+import base from "./firebase";
+import firebase from 'firebase'
 import {
     Redirect, useParams, Route, Link, withRouter
 } from "react-router-dom";
@@ -37,21 +38,10 @@ function CreateTicket(props) {
 
 
     const param = useParams();
-    const db = firebase.firestore();
+    const db = base.firestore();
 
     const createTicket = (event) => {
         event.preventDefault();
-        // db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', param.projectId)
-        //     .get().then(snapshot => snapshot.docs.forEach(doc => {
-        //         var projName = doc.data().projectName;
-        //         setName(projName)
-        //         doc.ref.collection("_tickets").add({
-        //             ticketDescription: ticketDescription,
-        //             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-        //         })
-        //     }
-        //     )).then(() =>
-        //         setFormState(!formState))
         db.collection("_tickets").add({
             ticketTitle: ticketTitle,
             ticketDescription: ticketDescription,
@@ -66,7 +56,7 @@ function CreateTicket(props) {
             setTicketDescription("")
             props.history.push('/')
 
-        }); //catch error?
+        });
 
 
 

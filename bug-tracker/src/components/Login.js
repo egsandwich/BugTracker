@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useContext } from "react";
 import { withRouter } from 'react-router-dom'
-import firebase from './firebase'
+import base from './firebase'
 import { AuthContext } from './Auth'
 
 function Login(props) {
@@ -13,7 +13,7 @@ function Login(props) {
         async event => {
             event.preventDefault();
             try {
-                await firebase
+                await base
                     .auth()
                     .signInWithEmailAndPassword(email, password);
                 props.history.push('/')

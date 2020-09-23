@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import db from "../components/firebase";
+import React, { useState, useContext } from "react";
+import base from "./firebase";
 import firebase from 'firebase';
 import { Redirect, withRouter, Route } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { AuthContext } from "./Auth";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,32 +22,34 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function goToDashboard(e) {
-    e.preventDefault()
-    this.props.history.push('/dashboard');
 
-}
+
 
 
 function CreateProject(props) {
+    const { currentUser } = useContext(AuthContext)
     const [projectName, setProjectName] = useState("");
-    const [projectOwner, setProjectOwner] = useState("");
+    const [projectOwner, setProjectOwner] = useState(null);
     // const [projects, setProjects] = useState([]);
     // const [tickets, setTickets] = useState([]);
+
+    const db = base.firestore();
 
     //this.setState({ dashboard: false });
     const [dashState, setDashState] = useState(false);
     const createProject = (event) => {
         event.preventDefault();
-        {/*copy this code for creating tickets*/ }
         db.collection('projects').add({
             projectName: projectName,
-            projectOwner: projectOwner,
+            projectOwner: currentUser,
             //time?  
             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => setDashState(!dashState))
-        setProjectName("");
-        setProjectOwner("");
+        }).then(() => {
+            setDashState(!dashState)
+            setProjectName("");
+            props.history.push('/')
+        })
+
     };
 
 
@@ -55,6 +58,12 @@ function CreateProject(props) {
     return (
         <div>
             Create project
+            <form>
+                <label>Project name</label>
+                <input value={projectName} onChange={(event) => setProjectName(event.target.value)} />
+                <button onClick={createProject}>Create project</button>
+
+            </form>
             {/* <Grid>
                 <Grid container>
                     <Typography variant="h4">Add project </Typography>
@@ -86,11 +95,11 @@ function CreateProject(props) {
 
                 </form>
             </Grid>
-            {dashState ? <Redirect to='/' /> : <Route path='/registerProject' />} */}
+            */}
         </div >
     );
 }
 
 
 
-export default CreateProject;
+export default withRouter(CreateProject);

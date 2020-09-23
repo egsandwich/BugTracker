@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useCallback } from "react";
 import Preview from "./Preview";
 import NavBar from "./NavBar";
 import Header from "./Header";
-import firebase from "./firebase";
+import base from "./firebase";
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI, Box } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 // import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
@@ -14,6 +14,29 @@ import { AuthContext } from "./Auth";
 function Dashboard(props) {
     //backend
 
+    const [newUser, setNewUser] = useState(false);
+    const [username, setUsername] = useState("");
+    const { currentUser } = useContext(AuthContext)
+
+    const handleUpdate = useCallback(
+        async event => {
+            event.preventDefault();
+            try {
+                await currentUser.updateProfile({
+                    displayName: username
+                })
+                props.history.push('/')
+            } catch (error) {
+                alert(error);
+            }
+        }
+    );
+
+    const logout = () => {
+        base.auth().signOut().then(
+            props.history.push('/login')
+        )
+    }
     // console.log(firebase.getCurrentUsername())
     // if (!firebase.getCurrentUsername()) {
     //     alert('Please login first')
@@ -51,31 +74,30 @@ function Dashboard(props) {
     // const classes = useStyles();
     // const theme = useTheme();
 
-    const { currentUser } = useContext(AuthContext)
-    return (
-        <Box>
+
+    useEffect(() => {
+        console.log(currentUser)
+        if (currentUser == null)
+            props.history.push('login')
+    }, [])
+
+    return currentUser != null && currentUser.displayName != null ? (
+        < Box >
             <Header username={currentUser.displayName} />
-            {/* {tickets.map((ticket) => (
-                <div>
-                    <p> title: {ticket.ticketTitle}</p>
-                    <p>description: {ticket.ticketDescription} </p>
-                    <p> type: {ticket.ticketType} </p>
-                    <p>status: {ticket.ticketStatus} </p>
-                    <p>priority: {ticket.ticketPriority} </p>
-
-
-                </div>
-
-
-            )
-
-            )} */}
             <ChartPriority />
             <div>
-                <button >Logout</button>
+                <button onClick={logout}>Logout</button>
             </div>
-        </Box>
-    );
+        </Box >
+    ) :
+        // put on a modal
+        <div>
+            <form>
+                <label>Username:</label>
+                <input value={username} onChange={(event) => setUsername(event.target.value)} />
+                <button onClick={handleUpdate}>Set username</button>
+            </form>
+        </div>;
 }
 
 
