@@ -81,7 +81,7 @@ function Dashboard(props) {
             props.history.push('login')
     }, [])
 
-    return currentUser != null && currentUser.displayName != null ? (
+    return currentUser.displayName != null ? (
         < Box >
             <Header username={currentUser.displayName} />
             <ChartPriority />
