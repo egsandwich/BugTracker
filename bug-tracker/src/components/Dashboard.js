@@ -32,54 +32,12 @@ function Dashboard(props) {
         }
     );
 
+
     const logout = () => {
         base.auth().signOut().then(
             props.history.push('/login')
         )
     }
-    // console.log(firebase.getCurrentUsername())
-    // if (!firebase.getCurrentUsername()) {
-    //     alert('Please login first')
-    //     props.history.replace('login')
-    //     return null
-    // }
-
-    // useEffect(() => {
-    //     firebase.getCurrentUsername
-    // })
-
-
-    // const [tickets, setTickets] = useState([]);
-    // useEffect(() => {
-
-    //     firebase.db.collection("_tickets")
-    //         .onSnapshot((snapshot) => {
-    //             setTickets(snapshot.docs.map((doc) => ({
-    //                 ticketTitle: doc.data().ticketTitle,
-    //                 ticketDescription: doc.data().ticketDescription,
-    //                 ticketType: doc.data().ticketType,
-    //                 ticketStatus: doc.data().ticketStatus,
-    //                 ticketPriority: doc.data().ticketPriority,
-    //             })))
-    //         })
-    // }, [])
-
-
-
-
-    // const useStyles = makeStyles((theme) => ({
-
-
-    // }))
-    // const classes = useStyles();
-    // const theme = useTheme();
-
-
-    useEffect(() => {
-        console.log(currentUser)
-        if (currentUser == null)
-            props.history.push('login')
-    }, [])
 
     return currentUser.displayName != null ? (
         < Box >
