@@ -23,7 +23,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
 import firebase from './components/firebase'
 import { AuthProvider } from './components/Auth'
-import { PrivateRoute } from './components/PrivateRoute'
+import PrivateRoute from './components/PrivateRoute'
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -129,12 +129,11 @@ function App() {
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
-          <Route path="/projects/:projectId" component={Project} />
-          <Route path="/tickets/:projectId" component={Project} />
+          <PrivateRoute path="/projects/:projectId" component={Project} />
           <Route path="/login" component={Login} />
-          <Route path="/addProject" component={CreateProject} />
-          <Route path="/:projectId/registerTicket" component={CreateTicket} />
-          <Route path="/" component={Dashboard} />
+          <PrivateRoute path="/addProject" component={CreateProject} />
+          <PrivateRoute path="/:projectId/registerTicket" component={CreateTicket} />
+          <PrivateRoute path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
         {/* bottom nav */}
