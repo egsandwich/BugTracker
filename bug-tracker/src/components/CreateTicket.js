@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import base from "./firebase";
+import { AuthContext } from './Auth'
 import firebase from 'firebase'
 import {
     Redirect, useParams, Route, Link, withRouter
@@ -33,13 +34,15 @@ function CreateTicket(props) {
     const [ticketTitle, setTicketTitle] = useState();
     const [ticketDescription, setTicketDescription] = useState("");
     const [ticketPriority, setTicketPriority] = useState("Low");
+    const [ticketCreator, setTicketCreator] = useState(null)
     const [formState, setFormState] = useState(false);
+    const { currentUser } = useContext(AuthContext)
 
 
+    useEffect(setTicketCreator(currentUser.uid), [])
 
     const param = useParams();
     const db = base.firestore();
-
     const createTicket = (event) => {
         event.preventDefault();
         db.collection("_tickets").add({
@@ -50,6 +53,7 @@ function CreateTicket(props) {
             ticketPriority: ticketPriority,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             project: param.projectId,
+            ticketCreator: ticketCreator,
         }).then(() => {
             setFormState(!formState)
             setTicketTitle("")

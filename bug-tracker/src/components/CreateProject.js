@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import base from "./firebase";
 import firebase from 'firebase';
 import { Redirect, withRouter, Route } from "react-router-dom";
@@ -30,6 +30,10 @@ function CreateProject(props) {
     const { currentUser } = useContext(AuthContext)
     const [projectName, setProjectName] = useState("");
     const [projectOwner, setProjectOwner] = useState(null);
+
+    useEffect(() => {
+        setProjectOwner(currentUser.uid)
+    }, [])
     // const [projects, setProjects] = useState([]);
     // const [tickets, setTickets] = useState([]);
 
@@ -41,7 +45,7 @@ function CreateProject(props) {
         event.preventDefault();
         db.collection('projects').add({
             projectName: projectName,
-            projectOwner: currentUser,
+            projectOwner: projectOwner,
             //time?  
             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
