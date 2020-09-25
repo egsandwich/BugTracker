@@ -1,7 +1,10 @@
-import React, { useState } from "react";
-import db from "./firebase";
-import firebase from 'firebase';
-import { Redirect, useParams, Route, Link } from "react-router-dom";
+import React, { useState, useContext, useEffect } from "react";
+import base from "./firebase";
+import { AuthContext } from './Auth'
+import firebase from 'firebase'
+import {
+    Redirect, useParams, Route, Link, withRouter
+} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
@@ -17,44 +20,94 @@ import Grid from '@material-ui/core/Grid';
 function CreateTicket(props) {
     //     const
     // }
-    {/*EDIT THIS OUT */ }
+    /*EDIT THIS OUT */
     // function CreateTicket() {
-    const [tickets, setTickets] = useState(["Theres a bug on line 18", "Tomorrow    "]);
+    const [tickets, setTickets] = useState([{
+        ticketTitle: "title",
+        ticketDescription: "description",
+        ticketType: "Error/Bug",
+        ticketStatus: "Open",
+        ticketPriority: "High",
+    },]);
+    const [ticketType, setTicketType] = useState("Bug/Error");
+    const [ticketStatus, setTicketStatus] = useState("Open");
+    const [ticketTitle, setTicketTitle] = useState();
     const [ticketDescription, setTicketDescription] = useState("");
+    const [ticketPriority, setTicketPriority] = useState("Low");
+    const [ticketCreator, setTicketCreator] = useState(null)
     const [formState, setFormState] = useState(false);
-    const [name, setName] = useState("")
+    const { currentUser } = useContext(AuthContext)
 
 
+    useEffect(setTicketCreator(currentUser.uid), [])
 
     const param = useParams();
-
+    const db = base.firestore();
     const createTicket = (event) => {
         event.preventDefault();
-        db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', param.projectId)
-            .get().then(snapshot => snapshot.docs.forEach(doc => {
-                var projName = doc.data().projectName;
-                setName(projName)
-                doc.ref.collection("_tickets").add({
-                    ticketDescription: ticketDescription,
-                    dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-                })
-            }
-            )).then(() =>
-                setFormState(!formState))
-        setTicketDescription("");
+        db.collection("_tickets").add({
+            ticketTitle: ticketTitle,
+            ticketDescription: ticketDescription,
+            ticketType: ticketType,
+            ticketStatus: ticketStatus,
+            ticketPriority: ticketPriority,
+            dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
+            project: param.projectId,
+            ticketCreator: ticketCreator,
+        }).then(() => {
+            setFormState(!formState)
+            setTicketTitle("")
+            setTicketDescription("")
+            props.history.push('/')
+
+        });
+
+
+
+
     }
 
-
-    {/*
-        create a collection from the project document 
-        try to automate na yung name of the ticket collection would be nameofproject append tickets
-        then redirect to project container updated with the ticket
-    */}
-
+    // const createTicket = (event) => {
+    //     event.preventDefault();
+    //     setTickets([...tickets, {
+    //         ticketTitle: ticketTitle,
+    //         ticketDescription: ticketDescription,
+    //         ticketType: ticketType,
+    //         ticketStatus: ticketStatus
+    //     },])
+    // }
 
 
     return (
         <div>
+            <form>
+                <label>Title</label>
+                <input type="text" value={ticketTitle} onChange={(event) => setTicketTitle(event.target.value)} />
+                <label> Description</label>
+                <input type="text" value={ticketDescription} onChange={(event) => setTicketDescription(event.target.value)} />
+                <label>Type</label>
+                <select value={ticketType} onChange={(event) => setTicketType(event.target.value)}>
+                    <option selected value="Bug/Error">Bug/Error</option>
+                    <option value="Request">Request</option>
+                </select>
+                <label>Status</label>
+                <select value={ticketStatus} onChange={(event) => setTicketStatus(event.target.value)}>
+                    <option selected value="Open">Open</option>
+                    <option value="In progress">In progress</option>
+                    <option value="Resolved">Resolved</option>
+                </select>
+                <label>Priority</label>
+                <select value={ticketPriority} onChange={(event) => setTicketPriority(event.target.value)}>
+                    <option selected value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </select>
+                <button type="submit" onClick={createTicket}>
+                    Create Ticket
+            </button>
+            </form>
+
+
             {/* <Typography variant="h3">Add ticket</Typography>
             <form>
                 <FormControl>
@@ -67,11 +120,24 @@ function CreateTicket(props) {
                 <Button variant="contained" type="submit" onClick={createTicket}>
                     Create Ticket
             </Button>
-            </form>
-            {formState ? <Redirect to={`/tickets/${param.projectId}`} /> : <Route path='/registerProject' />} */}
-            Create ticket
+            </form>*/
+            /* {tickets.map((ticket) => (
+                <div>
+                    <p> title: {ticket.ticketTitle}</p>
+                    <p>description: {ticket.ticketDescription} </p>
+                    <p> type: {ticket.ticketType} </p>
+                    <p>status: {ticket.ticketStatus} </p>
+                </div>
+
+            )
+
+            )}
+        
+            ); */}
+            {/* redirect to ticket summary? */}
+            {/* { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />} */}
         </div >
-    );
+    )
 }
 
-export default CreateTicket;
+export default withRouter(CreateTicket);

@@ -1,6 +1,7 @@
 import firebase from "firebase";
+import "firebase/auth"
 
-const firebaseApp = firebase.initializeApp({
+const base = firebase.initializeApp({
   apiKey: "AIzaSyAwpO3jAxS67_MCMRBQIdTMopk4rcegaJw",
   authDomain: "bug-tracker-egvl.firebaseapp.com",
   databaseURL: "https://bug-tracker-egvl.firebaseio.com",
@@ -11,6 +12,6 @@ const firebaseApp = firebase.initializeApp({
   measurementId: "G-HDERQJSZTM",
 });
 
-const db = firebaseApp.firestore();
 
-export default db;
+
+export default base;

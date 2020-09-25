@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
@@ -8,6 +8,7 @@ import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./components/Dashboard";
 import Drawer from "./components/Drawer";
 import Project from "./components/Project";
+import Signup from "./components/Signup";
 import NavBar from "./components/NavBar";
 import {
   makeStyles, xToolbar, Typography, Grid, List,
@@ -20,6 +21,9 @@ import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOu
 import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
+import firebase from './components/firebase'
+import { AuthProvider } from './components/Auth'
+import PrivateRoute from './components/PrivateRoute'
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -109,42 +113,39 @@ const useStyles = makeStyles(theme => ({
 
 
 function App() {
-  //in use effect for the future, check if logged in
-
-  //useEffect(() => {}, [
-  //put condition here
-  //]); //run code in a condition in react
-  //UI
 
 
   const classes = useStyles();
   const theme = useTheme();
 
 
+
   return (
-    <Router>
-      <CssBaseline /> {/*removes default padding */}
-      {/* if logged in show dashboard */}
-      <NavBar />
-      <Switch>
-        <Route path="/contact" component={Contact} />
-        <Route path="/projects/:projectId" component={Project} />
-        <Route path="/tickets/:projectId" component={Project} />
-        <Route path="/login" component={Login} />
-        <Route path="/registerProject" component={CreateProject} />
-        <Route path="/:projectId/registerTicket" component={CreateTicket} />
-        <Route path="/" component={Dashboard} />
-        <Route path="/" render={() => <div><h1>404</h1></div>} />
-      </Switch>
-      {/* bottom nav */}
-      {/* CssBaseline? */}
-      {/* <footer className={classes.footer}>
+    <AuthProvider>
+      <Router>
+        <CssBaseline /> {/*removes default padding */}
+        {/* if logged in show dashboard */}
+        <NavBar />
+        <Switch>
+          <Route path="/contact" component={Contact} />
+          <Route path="/signup" component={Signup} />
+          <PrivateRoute path="/projects/:projectId" component={Project} />
+          <Route path="/login" component={Login} />
+          <PrivateRoute path="/addProject" component={CreateProject} />
+          <PrivateRoute path="/:projectId/registerTicket" component={CreateTicket} />
+          <PrivateRoute path="/" component={Dashboard} />
+          <Route path="/" render={() => <div><h1>404</h1></div>} />
+        </Switch>
+        {/* bottom nav */}
+        {/* CssBaseline? */}
+        {/* <footer className={classes.footer}>
           <Container maxWidth="sm">
             <Typography variant="body2">  {'Copyright © '} </Typography>
           </Container>
         </footer> */}
-    </Router >
-  );
+      </Router >
+    </AuthProvider>
+  )
 }
 
 export default App;
