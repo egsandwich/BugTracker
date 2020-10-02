@@ -10,6 +10,7 @@ import MenuOutlinedIcon from '@material-ui/icons/MenuOutlined'
 import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
 import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutlined'
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
+import ListAltOutlinedIcon from '@material-ui/icons/ListAltOutlined'
 import { Link } from 'react-router-dom'
 
 //CSS styles
@@ -39,6 +40,11 @@ const menuItems = [
         listIcon: <HomeOutlinedIcon />,
         listText: "Home",
         listPath: "/"
+    },
+    {
+        listIcon: <ListAltOutlinedIcon />,
+        listText: "My projects",
+        listPath: "/projects"
     },
     {
         listIcon: <AddBoxOutlinedIcon />,
