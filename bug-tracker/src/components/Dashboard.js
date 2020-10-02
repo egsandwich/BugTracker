@@ -14,23 +14,17 @@ import { AuthContext } from "./Auth";
 function Dashboard(props) {
     //backend
 
-    const [newUser, setNewUser] = useState(false);
-    const [username, setUsername] = useState("");
     const { currentUser } = useContext(AuthContext)
-
-    const handleUpdate = useCallback(
-        async event => {
-            event.preventDefault();
-            try {
-                await currentUser.updateProfile({
-                    displayName: username
-                })
-                props.history.push('/')
-            } catch (error) {
-                alert(error);
-            }
+    useEffect(() => {
+        if (currentUser.displayName != null) {
+            base.firestore().collection('users').where('userId', '==', currentUser.uid)
+                .get().then(snapshot => snapshot.docs.forEach(doc => {
+                    currentUser.updateProfile({
+                        displayName: doc.data().firstName + " " + doc.data().lastName
+                    })
+                }))
         }
-    );
+    }, [])
 
 
     const logout = () => {
@@ -39,7 +33,7 @@ function Dashboard(props) {
         )
     }
 
-    return currentUser.displayName != null ? (
+    return (
         < Box >
             <Header username={currentUser.displayName} />
             <ChartPriority />
@@ -47,15 +41,7 @@ function Dashboard(props) {
                 <button onClick={logout}>Logout</button>
             </div>
         </Box >
-    ) :
-        // put on a modal
-        <div>
-            <form>
-                <label>Username:</label>
-                <input value={username} onChange={(event) => setUsername(event.target.value)} />
-                <button onClick={handleUpdate}>Set username</button>
-            </form>
-        </div>;
+    )
 }
 
 
