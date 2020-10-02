@@ -8,6 +8,7 @@ import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./components/Dashboard";
 import Drawer from "./components/Drawer";
 import Project from "./components/Project";
+import ProjectList from "./components/ProjectList";
 import Signup from "./components/Signup";
 import NavBar from "./components/NavBar";
 import {
@@ -24,6 +25,7 @@ import clsx from 'clsx';
 import firebase from './components/firebase'
 import { AuthProvider } from './components/Auth'
 import PrivateRoute from './components/PrivateRoute'
+import Profile from './components/Profile'
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -130,6 +132,8 @@ function App() {
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
           <PrivateRoute path="/projects/:projectId" component={Project} />
+          <PrivateRoute path="/projects/" component={ProjectList} />
+          <PrivateRoute path="/myProfile/" component={Profile} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/addProject" component={CreateProject} />
           <PrivateRoute path="/:projectId/registerTicket" component={CreateTicket} />
