@@ -24,11 +24,12 @@ function Signup(props) {
                 .auth()
                 .createUserWithEmailAndPassword(email, password).then(function (data) {
                     // console.log(data.user.uid)
-                    db.collection('users').add({
-                        userId: data.user.uid,
+                    db.collection('users').doc(data.user.uid).set({
+                        // userId: data.user.uid,
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
+                        isModerator: false,
                     })
 
                 })
