@@ -49,6 +49,10 @@ function CreateProject(props) {
             //time?  
             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
+            db.collection('users').doc(currentUser.uid)
+                .update({
+                    isModerator: true
+                })
             setDashState(!dashState)
             setProjectName("");
             props.history.push('/')
