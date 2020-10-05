@@ -15,14 +15,17 @@ function Dashboard(props) {
     //backend
 
     const { currentUser } = useContext(AuthContext)
+
     useEffect(() => {
-        if (currentUser.displayName != null) {
-            base.firestore().collection('users').where('userId', '==', currentUser.uid)
-                .get().then(snapshot => snapshot.docs.forEach(doc => {
-                    currentUser.updateProfile({
-                        displayName: doc.data().firstName + " " + doc.data().lastName
-                    })
-                }))
+        if (currentUser != null) {
+            if (currentUser.displayName != null) {
+                base.firestore().collection('users').where('userId', '==', currentUser.uid)
+                    .get().then(snapshot => snapshot.docs.forEach(doc => {
+                        currentUser.updateProfile({
+                            displayName: doc.data().firstName + " " + doc.data().lastName
+                        })
+                    }))
+            }
         }
     }, [])
 
