@@ -8,7 +8,6 @@ function ChartPriority() {
     const [mediumCount, setMediumCount] = useState(0);
     const [highCount, setHighCount] = useState(0);
     const db = firebase.firestore();
-    const [temp, setTemp] = useState([])
 
     useEffect(() => {
         db.collection('_tickets').where("ticketPriority", "==", 'High')
@@ -36,7 +35,6 @@ function ChartPriority() {
                 setLowCount(snapshot.size)
             })
     }, [])
-    // console.log(temp.length)
 
     return (
         <div>

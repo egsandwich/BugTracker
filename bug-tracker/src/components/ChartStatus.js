@@ -1,59 +1,49 @@
-import React from 'react'
-const [lowCount, setLowCount] = useState(0);
-const [mediumCount, setMediumCount] = useState(0);
-const [highCount, setHighCount] = useState(0);
+import React, { useEffect, useState } from 'react'
+import firebase from "./firebase";
 
-useEffect(() => {
-    db.collection('_tickets').where("ticketPriority", "==", 'High')
-        .get()
-        .then(snapshot => {
-            snapshot.docs.map(doc => {
-                setHighCount(highCount + 1);
 
-            }
-            )
-        })
-}, [])
 
-useEffect(() => {
-    db.collection('_tickets').where("ticketPriority", "==", 'Medium')
-        .get()
-        .then(snapshot => {
-            snapshot.docs.map(doc => {
-                setMediumCount(mediumCount + 1);
-
-            }
-            )
-        })
-}, [])
-
-useEffect(() => {
-    db.collection('_tickets').where("ticketPriority", "==", 'Low')
-        .get()
-        .then(snapshot => {
-            snapshot.docs.map(doc => {
-                setLowCount(lowCount + 1);
-
-            }
-            )
-        })
-}, [])
-
-return (
-    <div>
-        <p>Tickets by priority</p>
-        <p>Low : {lowCount}</p>
-        <p> Medium : {mediumCount}</p>
-        <p>High : {highCount}</p>
-    </div>
-)
-}
 function ChartStatus() {
+    const [openCount, setOpenCount] = useState(0);
+    const [inProgressCount, setInProgressCount] = useState(0);
+    const [resolvedCount, setResolvedCount] = useState(0);
+    const db = firebase.firestore();
+
+    useEffect(() => {
+        db.collection('_tickets').where("ticketStatus", "==", 'Open')
+            .get()
+            .then(snapshot => {
+
+                setOpenCount(snapshot.size)
+            })
+    }, [])
+
+    useEffect(() => {
+        db.collection('_tickets').where("ticketStatus", "==", 'In progress')
+            .get()
+            .then(snapshot => {
+                setInProgressCount(snapshot.size);
+
+
+            })
+    }, [])
+
+    useEffect(() => {
+        db.collection('_tickets').where("ticketStatus", "==", 'Resolved')
+            .get()
+            .then(snapshot => {
+                setResolvedCount(snapshot.size)
+            })
+    }, [])
+
     return (
         <div>
-
+            <p>Tickets by status</p>
+            <p>Low : {openCount}</p>
+            <p> Medium : {inProgressCount}</p>
+            <p>High : {resolvedCount}</p>
         </div>
     )
 }
 
-export default ChartStatus
+export default ChartStatus;
