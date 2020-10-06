@@ -22,7 +22,6 @@ import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOu
 import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
-import firebase from './components/firebase'
 import { AuthProvider } from './components/Auth'
 import PrivateRoute from './components/PrivateRoute'
 import Profile from './components/Profile'
@@ -126,17 +125,16 @@ function App() {
     <AuthProvider>
       <Router>
         <CssBaseline /> {/*removes default padding */}
-        {/* if logged in show dashboard */}
         <NavBar />
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
           <PrivateRoute path="/projects/:projectId" component={Project} />
-          <PrivateRoute path="/projects/" component={ProjectList} />
+          <PrivateRoute path="/myProjects/" component={ProjectList} />
           <PrivateRoute path="/myProfile/" component={Profile} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/addProject" component={CreateProject} />
-          <PrivateRoute path="/:projectId/registerTicket" component={CreateTicket} />
+          <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
           <PrivateRoute path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
