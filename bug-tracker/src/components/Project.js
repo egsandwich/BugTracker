@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import db from './firebase';
+import base from './firebase';
 import firebase from 'firebase';
 import { withRouter, useParams, Link } from "react-router-dom";
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
@@ -12,21 +12,28 @@ import Ticket from "./Ticket";
 function Project(props) {
 
   const [nameOfProj, setNameOfProj] = useState("");
-  const [nameOfOwner, setNameOfOwner] = useState("");
+  const [nameOfOwner, setNameOfOwner] = useState(null);
   const [tickets, setTickets] = useState([]);
+  const [project, setProject] = useState("");
+  const db = base.firestore()
 
   const params = useParams();
 
 
   useEffect(() => {
     db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
-      .get().then(snapshot => snapshot.docs.forEach(doc => {
-        saveProjectName(doc)
+      .onSnapshot(snapshot => snapshot.docs.forEach(doc => {
+        // saveProjectName(doc)
+        // setProject({ projectName: doc.data().projectName, dateCreated: doc.data().dateCreated })
+        setNameOfProj(doc.data().projectName)
+        setNameOfOwner(doc.data().dateCreated.seconds * 1000)
+        console.log(doc.data().projectName)
+        // console.log(doc.data().dateCreated.toDate())
       }
-
       ))
 
-  });
+  }, []);
+
 
 
   useEffect(() => {
@@ -42,6 +49,7 @@ function Project(props) {
 
       }))
   }, [])
+
 
   function saveProjectName(a) {
     setNameOfProj(a.data().projectName)
@@ -68,33 +76,11 @@ function Project(props) {
   }))
   const classes = useStyles();
 
-  function createTicket() {
-
-  }
   return (
     <div>
-      {/* <Grid className={classes.gridHeader}>
-        <Grid container spacing={2}>
-          <Grid item><Typography variant="h4">Tickets on {nameOfProj} </Typography></Grid>
-          <Grid item>
-            <Link to={`/${params.projectId}/registerTicket`}>
-              <LinkUI color="primary">
-                <AddCircleOutlinedIcon fontSize='large' style={{ textDecoration: 'none' }} />
-              </LinkUI>
-            </Link>
-          </Grid>
-        </Grid>
-        <Grid container item margin='1'><Typography variant="h5">Admin: {nameOfOwner} </Typography></Grid>
-      </Grid>
-      <Grid className={classes.gridList}>
-        <Grid container spacing={0}>
-          {tickets.map((ticket) => (
-            <Ticket description={ticket.ticketDescription} />
-          ))
-          }
-        </Grid>
-      </Grid> */}
-      Projects
+      <p>{nameOfProj}</p>
+      <p>Date created: {new Date(nameOfOwner).toLocaleDateString('no-NO')}</p>
+      <p><button >Add Ticket</button></p>
     </div >
   );
 }
@@ -102,3 +88,25 @@ function Project(props) {
 
 
 export default withRouter(Project);
+
+{/* <Grid className={classes.gridHeader}>
+<Grid container spacing={2}>
+  <Grid item><Typography variant="h4">Tickets on {nameOfProj} </Typography></Grid>
+  <Grid item>
+    <Link to={`/${params.projectId}/registerTicket`}>
+      <LinkUI color="primary">
+        <AddCircleOutlinedIcon fontSize='large' style={{ textDecoration: 'none' }} />
+      </LinkUI>
+    </Link>
+  </Grid>
+</Grid>
+<Grid container item margin='1'><Typography variant="h5">Admin: {nameOfOwner} </Typography></Grid>
+</Grid>
+<Grid className={classes.gridList}>
+<Grid container spacing={0}>
+  {tickets.map((ticket) => (
+    <Ticket description={ticket.ticketDescription} />
+  ))
+  }
+</Grid>
+</Grid> */}
