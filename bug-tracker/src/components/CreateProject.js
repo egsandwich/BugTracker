@@ -55,7 +55,7 @@ function CreateProject(props) {
                 })
             setDashState(!dashState)
             setProjectName("");
-            props.history.push('/')
+            props.history.push('/myProjects')
         })
 
     };
