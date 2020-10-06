@@ -44,12 +44,12 @@ const menuItems = [
     {
         listIcon: <ListAltOutlinedIcon />,
         listText: "My projects",
-        listPath: "/projects"
+        listPath: "/myProjects"
     },
     {
         listIcon: <AddBoxOutlinedIcon />,
         listText: "Add project",
-        listPath: "/registerProject"
+        listPath: "/addProject"
     },
     {
         listIcon: <SettingsOutlinedIcon />,
