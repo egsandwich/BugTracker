@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react'
 import base from './firebase'
+import { Link, withRouter } from 'react-router-dom'
 import { AuthContext } from './Auth'
 
 function ProjectList() {
@@ -7,7 +8,6 @@ function ProjectList() {
     const { currentUser } = useContext(AuthContext)
     const [done, setDone] = useState(false)
     const db = base.firestore()
-    let results;
 
     useEffect(() => {
 
@@ -28,11 +28,12 @@ function ProjectList() {
             <h1>My projects</h1>
             {projects.map((project) => (
                 <div>
-                    <p>Name: {project.projectName} </p>
+                    <a href={`/myProjects/${project.id}`}> <p>Name: {project.projectName} </p></a>
+
                 </div>
             ))}
         </div>
     )
 }
 
-export default ProjectList
+export default withRouter(ProjectList);
