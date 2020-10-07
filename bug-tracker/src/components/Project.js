@@ -9,13 +9,12 @@ import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import Ticket from "./Ticket";
 
 
+const db = base.firestore()
 function Project(props) {
 
   const [nameOfProj, setNameOfProj] = useState("");
-  const [nameOfOwner, setNameOfOwner] = useState(null);
+  const [dateCreated, setDateCreated] = useState(null);
   const [tickets, setTickets] = useState([]);
-  const [project, setProject] = useState("");
-  const db = base.firestore()
 
   const params = useParams();
 
@@ -23,12 +22,8 @@ function Project(props) {
   useEffect(() => {
     db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
       .onSnapshot(snapshot => snapshot.docs.forEach(doc => {
-        // saveProjectName(doc)
-        // setProject({ projectName: doc.data().projectName, dateCreated: doc.data().dateCreated })
         setNameOfProj(doc.data().projectName)
-        setNameOfOwner(doc.data().dateCreated.seconds * 1000)
-        console.log(doc.data().projectName)
-        // console.log(doc.data().dateCreated.toDate())
+        setDateCreated(doc.data().dateCreated.seconds * 1000)
       }
       ))
 
@@ -37,50 +32,51 @@ function Project(props) {
 
 
   useEffect(() => {
-    db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
-      .get().then(snapshot => snapshot.docs.forEach(doc => {
-        doc.ref.collection("_tickets").onSnapshot(snapshot => {
-          setTickets(snapshot.docs.map(doc => ({
-            id: doc.id,
-            ticketDescription: doc.data().ticketDescription
-          })) //map
-          )
-        })
+    db.collection("_tickets").where("project", "==", params.projectId)
+      .onSnapshot(snapshot => {
+        setTickets(snapshot.docs.map(doc => ({
+          id: doc.id, dateCreated: doc.data().dateCreated,
+          ticketCreator: doc.data().ticketCreator,
+          ticketDescription: doc.data().ticketDescription,
+          ticketPriority: doc.data().ticketPriority,
+          ticketStatus: doc.data().ticketStatus,
+          ticketType: doc.data().ticketType,
+          ticketTitle: doc.data().ticketTitle
+        })))
+      })
+    // db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
+    //   .get().then(snapshot => snapshot.docs.forEach(doc => {
+    //     doc.ref.collection("_tickets").onSnapshot(snapshot => {
+    //       setTickets(snapshot.docs.map(doc => ({
+    //         id: doc.id,
+    //         ticketDescription: doc.data().ticketDescription
+    //       })) //map
+    //       )
+    //     })
 
-      }))
+    //   }))
   }, [])
 
+  const clickHandler = () => {
+    props.history.push(`/${params.projectId}/addTicket`)
 
-  function saveProjectName(a) {
-    setNameOfProj(a.data().projectName)
-    setNameOfOwner(a.data().projectOwner)
   }
-
-
-  const useStyles = makeStyles((theme) => ({
-    style: {
-      backgroundColor: "blue",
-      [theme.breakpoints.up("sm")]: {
-        backgroundColor: "black"
-      }
-    },
-    gridList: {
-      width: '100%',
-      height: '60%',
-    },
-    gridHeader: {
-      width: '100%',
-      height: '3%',
-      margin: theme.spacing(1)
-    }
-  }))
-  const classes = useStyles();
-
   return (
     <div>
       <p>{nameOfProj}</p>
-      <p>Date created: {new Date(nameOfOwner).toLocaleDateString('no-NO')}</p>
-      <p><button >Add Ticket</button></p>
+      <p>Date created: {new Date(dateCreated).toLocaleDateString('no-NO')}</p>
+      <p><button onClick={clickHandler}>Add Ticket</button></p>
+      <></>
+      <p><b>Tickets</b></p>
+      {tickets.map((ticket) => (
+        <div>
+          <p>{ticket.ticketTitle}</p>
+          <p>{ticket.ticketDescription}</p>
+          <p>{ticket.ticketStatus}</p>
+          <p>{ticket.ticketPriority}</p>
+          <p>{ticket.ticketType}</p>
+        </div>
+      ))}
     </div >
   );
 }
@@ -110,3 +106,22 @@ export default withRouter(Project);
   }
 </Grid>
 </Grid> */}
+
+// const useStyles = makeStyles((theme) => ({
+//   style: {
+//     backgroundColor: "blue",
+//     [theme.breakpoints.up("sm")]: {
+//       backgroundColor: "black"
+//     }
+//   },
+//   gridList: {
+//     width: '100%',
+//     height: '60%',
+//   },
+//   gridHeader: {
+//     width: '100%',
+//     height: '3%',
+//     margin: theme.spacing(1)
+//   }
+// }))
+// const classes = useStyles();
