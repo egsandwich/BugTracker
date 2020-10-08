@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import base from './firebase';
 import firebase from 'firebase';
-import { withRouter, useParams, Link } from "react-router-dom";
+import { withRouter, useParams, Link, Redirect } from "react-router-dom";
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 // import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
@@ -9,14 +9,14 @@ import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import Ticket from "./Ticket";
 
 
-const db = base.firestore()
 function Project(props) {
+  const db = base.firestore()
+  const params = useParams();
 
   const [nameOfProj, setNameOfProj] = useState("");
   const [dateCreated, setDateCreated] = useState(null);
   const [tickets, setTickets] = useState([]);
 
-  const params = useParams();
 
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function Project(props) {
       }
       ))
 
-  }, []);
+  }, [db, params.projectId]);
 
 
 
@@ -44,18 +44,8 @@ function Project(props) {
           ticketTitle: doc.data().ticketTitle
         })))
       })
-    // db.collection("projects").where(firebase.firestore.FieldPath.documentId(), '==', params.projectId)
-    //   .get().then(snapshot => snapshot.docs.forEach(doc => {
-    //     doc.ref.collection("_tickets").onSnapshot(snapshot => {
-    //       setTickets(snapshot.docs.map(doc => ({
-    //         id: doc.id,
-    //         ticketDescription: doc.data().ticketDescription
-    //       })) //map
-    //       )
-    //     })
 
-    //   }))
-  }, [])
+  }, [db, params.projectId])
 
   const clickHandler = () => {
     props.history.push(`/${params.projectId}/addTicket`)
@@ -70,11 +60,12 @@ function Project(props) {
       <p><b>Tickets</b></p>
       {tickets.map((ticket) => (
         <div>
-          <p>{ticket.ticketTitle}</p>
-          <p>{ticket.ticketDescription}</p>
-          <p>{ticket.ticketStatus}</p>
-          <p>{ticket.ticketPriority}</p>
-          <p>{ticket.ticketType}</p>
+          <Link to={`/${params.projectId}/${ticket.id}`}>
+            <p>{ticket.ticketTitle}</p>
+            <p>{ticket.ticketStatus}</p>
+            <p>{ticket.ticketPriority}</p>
+            <p>{ticket.ticketType}</p>
+          </Link>
         </div>
       ))}
     </div >
