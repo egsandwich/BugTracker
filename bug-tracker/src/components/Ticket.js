@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import { Link as LinkUI } from '@material-ui/core/';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import { grey, } from '@material-ui/core/colors';
-import { Link } from "react-router-dom";
-
+import { Link, withRouter, useParams } from "react-router-dom";
+import base from './firebase'
+import firebase from 'firebase'
+import CommentModal from './CommentModal'
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.primary.main,
@@ -22,8 +24,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Ticket(props) {
+    const db = base.firestore();
+    const [ticketTitle, setTicketTitle] = useState("");
+    // const [ticketId, setTicketId] = useState("");
+    const [ticketCreator, setTicketCreator] = useState("");
+    const [ticketDescription, setTicketDescription] = useState("");
+    const [ticketPriority, setTicketPriority] = useState("");
+    const [ticketStatus, setTicketStatus] = useState("");
+    const [ticketType, setTicketType] = useState("");
+    const [active, setActive] = useState(false);
+
+    const params = useParams();
+
+    useEffect(() => {
+        db.collection('_tickets').where(firebase.firestore.FieldPath.documentId(), "==", params.ticketId)
+            .onSnapshot(snapshot => snapshot.docs.forEach(doc => {
+                setTicketTitle(doc.data().ticketTitle)
+                setTicketDescription(doc.data().ticketDescription)
+                setTicketPriority(doc.data().ticketPriority)
+                setTicketStatus(doc.data().ticketStatus)
+                setTicketType(doc.data().ticketType)
+                db.collection("users").where(firebase.firestore.FieldPath.documentId(), "==", doc.data().ticketCreator)
+                    .onSnapshot(snapshot => snapshot.docs.map(doc => {
+                        setTicketCreator(doc.data().firstName + " " + doc.data().lastName)
+                    }))
+            }))
+    }, [db, params.ticketId])
+
+    const addCommentHandler = () => {
+        // db.collection('comments').add({
+
+        // })
+        setActive(!active)
+    }
     const classes = useStyles();
-    console.log(props);
+
+    //useEffect get details 
     return (
         <div>
             {/* <Card className={classes.root}>
@@ -31,9 +67,17 @@ function Ticket(props) {
                     {props.description}
                 </Typography>
             </Card> */}
-            Ticket
+            <p>{ticketTitle}</p>
+            <p>{ticketCreator} </p>
+            <p>{ticketDescription}</p>
+            <p>{ticketPriority} </p>
+            <p>{ticketStatus} </p>
+            <p>{ticketType} </p>
+
+            <button onClick={addCommentHandler}>Add comment</button>
+            <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} />
         </div>
     )
 }
 
-export default Ticket
+export default withRouter(Ticket)
