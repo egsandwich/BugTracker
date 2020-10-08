@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import firebase from "./firebase";
+import base from "./firebase";
 
 
 
+const db = base.firestore();
 function ChartStatus() {
     const [openCount, setOpenCount] = useState(0);
     const [inProgressCount, setInProgressCount] = useState(0);
     const [resolvedCount, setResolvedCount] = useState(0);
-    const db = firebase.firestore();
 
     useEffect(() => {
         db.collection('_tickets').where("ticketStatus", "==", 'Open')
@@ -34,7 +34,9 @@ function ChartStatus() {
             .then(snapshot => {
                 setResolvedCount(snapshot.size)
             })
-    }, [])
+    }, [
+        //db here?
+    ])
 
     return (
         <div>

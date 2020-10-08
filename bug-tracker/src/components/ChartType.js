@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import base from './firebase'
 
+const db = base.firestore()
 function ChartType() {
     const [errorBugCount, setErrorBugCount] = useState(0);
     const [requestCount, setRequestCount] = useState(0);
 
-    const db = base.firestore()
 
     useEffect(() => {
         db.collection('_tickets').where("ticketType", "==", 'Bug/Error')
