@@ -25,6 +25,7 @@ import clsx from 'clsx';
 import { AuthProvider } from './components/Auth'
 import PrivateRoute from './components/PrivateRoute'
 import Profile from './components/Profile'
+import Ticket from "./components/Ticket";
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -129,7 +130,8 @@ function App() {
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
-          <PrivateRoute path="/projects/:projectId" component={Project} />
+          <PrivateRoute path="/myProjects/:projectId" component={Project} />
+          <PrivateRoute path="/:projectId/:ticketId" component={Ticket} />
           <PrivateRoute path="/myProjects/" component={ProjectList} />
           <PrivateRoute path="/myProfile/" component={Profile} />
           <Route path="/login" component={Login} />
