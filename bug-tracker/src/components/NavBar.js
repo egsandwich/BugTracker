@@ -61,6 +61,7 @@ const menuItems = [
         listText: "Contact us",
         listPath: "/contact"
     },
+    //add logout
 ]
 function NavBar() {
     const [state, setState] = useState({
