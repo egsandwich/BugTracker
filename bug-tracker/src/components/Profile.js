@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { AuthContext } from './Auth'
 import base from './firebase'
-import Modal from './Modal'
+import EditModal from './EditModal'
 
 function Profile() {
     const [name, setName] = useState(null)
@@ -27,7 +27,7 @@ function Profile() {
             <p><label>Email</label></p>
             <p>{email}</p>
             <p><button onClick={showMod}>Edit</button></p>
-            <Modal state={showModal} user={currentUser} />
+            <editModal state={showModal} user={currentUser} />
         </div>
     )
 }
