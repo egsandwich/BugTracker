@@ -34,12 +34,11 @@ function CreateTicket(props) {
     const [ticketTitle, setTicketTitle] = useState();
     const [ticketDescription, setTicketDescription] = useState("");
     const [ticketPriority, setTicketPriority] = useState("Low");
-    const [ticketCreator, setTicketCreator] = useState(null)
+    // const [ticketCreator, setTicketCreator] = useState(null)
     const [formState, setFormState] = useState(false);
     const { currentUser } = useContext(AuthContext)
 
 
-    useEffect(setTicketCreator(currentUser.uid), [])
 
     const param = useParams();
     const db = base.firestore();
@@ -53,11 +52,12 @@ function CreateTicket(props) {
             ticketPriority: ticketPriority,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             project: param.projectId,
-            ticketCreator: ticketCreator,
+            ticketCreator: currentUser.uid,
         }).then(() => {
             setFormState(!formState)
             setTicketTitle("")
             setTicketDescription("")
+            //push to project instead?
             props.history.push('/')
 
         });
