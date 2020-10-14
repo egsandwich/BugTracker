@@ -49,7 +49,6 @@ function CreateProject(props) {
         })
     }, [db])
 
-    // console.log(currentUser.uid)
 
     //this.setState({ dashboard: false });
     const [dashState, setDashState] = useState(false);
@@ -81,19 +80,15 @@ function CreateProject(props) {
                 catch (error) {
                     db.collection('projects').doc(docRef.id)
                     .delete().then(
-                        console.log("successful delete")
+                        props.history.push('/addProject')
                     )
-                    console.log(error)
-                    alert("please try again")
+                    alert("Something went wrong. Please try again.")
                 }
          
         })
     };
 
-    // const createProject = (event) => {
-    //     console.log(projectMembers.filter(nullChecker))
 
-    // }
 
    
 
@@ -113,11 +108,10 @@ function CreateProject(props) {
             alert("already included")
     }
     const classes = useStyles();
-    // console.log(dashState);
     return (
         <div>
             Create project
-            {/* <form> */}
+            <form>
                 <label>Project name</label>
                 <input value={projectName} onChange={(event) => setProjectName(event.target.value)} />
                 <p><label>Add members</label> </p>
@@ -129,7 +123,7 @@ function CreateProject(props) {
                 ))}
                 <button onClick={createProject} disabled={projectName.length < 1}>Create project</button>
 
-            {/* </form> */}
+            </form>
             {/* <Grid>
                 <Grid container>
                     <Typography variant="h4">Add project </Typography>

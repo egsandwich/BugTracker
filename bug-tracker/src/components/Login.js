@@ -18,7 +18,10 @@ function Login(props) {
                     .signInWithEmailAndPassword(email, password);
                 props.history.push('/')
             } catch (error) {
-                alert(error);
+                alert("Something went wrong. Please try again");
+                setPassword("");
+                props.history.push('/login')
+
             }
         }
     );
@@ -33,7 +36,7 @@ function Login(props) {
                 <p> <input value={email} onChange={(event) => setEmail(event.target.value)} />  </p>
                 <p> <label>Password:</label> </p>
                 <p> <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
-                <p><button type="submit">Login</button></p>
+                <p><button disabled={email.length == 0 || password.length == 0}type="submit">Login</button></p>
             </form>
         </div >
     );

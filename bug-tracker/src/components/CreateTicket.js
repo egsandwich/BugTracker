@@ -31,7 +31,7 @@ function CreateTicket(props) {
     },]);
     const [ticketType, setTicketType] = useState("Bug/Error");
     const [ticketStatus, setTicketStatus] = useState("Open");
-    const [ticketTitle, setTicketTitle] = useState();
+    const [ticketTitle, setTicketTitle] = useState("");
     const [ticketDescription, setTicketDescription] = useState("");
     const [ticketPriority, setTicketPriority] = useState("Low");
     // const [ticketCreator, setTicketCreator] = useState(null)
@@ -60,22 +60,15 @@ function CreateTicket(props) {
             //push to project instead?
             props.history.push('/')
 
+        }).catch(error => {
+            alert("Please try again")
+            props.history.push(`${param.projectId}/addTicket`)
         });
 
 
 
 
-    }
-
-    // const createTicket = (event) => {
-    //     event.preventDefault();
-    //     setTickets([...tickets, {
-    //         ticketTitle: ticketTitle,
-    //         ticketDescription: ticketDescription,
-    //         ticketType: ticketType,
-    //         ticketStatus: ticketStatus
-    //     },])
-    // }
+    }  
 
 
     return (
@@ -102,7 +95,7 @@ function CreateTicket(props) {
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
                 </select>
-                <button type="submit" onClick={createTicket}>
+                <button type="submit" disabled={ticketTitle.length == 0 || ticketDescription.length == 0} onClick={createTicket}>
                     Create Ticket
             </button>
             </form>
