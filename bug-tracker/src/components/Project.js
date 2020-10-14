@@ -48,7 +48,7 @@ function Project(props) {
   }, [db, params.projectId])
 
   const clickHandler = () => {
-    props.history.push(`/${params.projectId}/addTicket`)
+    props.history.push(`/${params.projectId}+addTicket`)
 
   }
   return (
@@ -60,7 +60,7 @@ function Project(props) {
       <p><b>Tickets</b></p>
       {tickets.map((ticket) => (
         <div>
-          <Link to={`/${params.projectId}/${ticket.id}`}>
+          <Link to={`tickets/${params.projectId}/${ticket.id}`}>
             <p>{ticket.ticketTitle}</p>
             <p>{ticket.ticketStatus}</p>
             <p>{ticket.ticketPriority}</p>

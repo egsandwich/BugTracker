@@ -19,7 +19,6 @@ function ProjectList() {
                 id: doc.id, projectName: doc.data().projectName, projectOwner: doc.data().projectOwner
             })))
         })
-        // console.log(projects)
 
     }, [])
 
@@ -42,7 +41,7 @@ function ProjectList() {
             <h1>Projects I manage</h1>
             {projectsOwn.map((project) => (
                 <div>
-                    <a href={`/myProjects/${project.id}`}> <p>Name: {project.projectName} </p></a>
+                    <a href={`/detail=${project.id}`}> <p>Name: {project.projectName} </p></a>
 
                 </div>
             ))}
