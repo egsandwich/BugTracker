@@ -130,13 +130,13 @@ function App() {
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
-          <PrivateRoute path="/myProjects/:projectId" component={Project} />
-          <PrivateRoute path="/:projectId/:ticketId" component={Ticket} />
-          <PrivateRoute path="/myProjects/" component={ProjectList} />
+          <PrivateRoute path="/myProjects" component={ProjectList} />
+          <PrivateRoute path="/detail=:projectId" component={Project} />
+          <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
+          <PrivateRoute path="/tickets/:projectId/:ticketId" component={Ticket} />
           <PrivateRoute path="/myProfile/" component={Profile} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/addProject" component={CreateProject} />
-          <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
           <PrivateRoute path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
