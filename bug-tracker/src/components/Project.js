@@ -10,8 +10,9 @@ import Ticket from "./Ticket";
 
 
 function Project(props) {
-  const db = base.firestore()
   const params = useParams();
+  const db = base.firestore()
+
 
   const [nameOfProj, setNameOfProj] = useState("");
   const [dateCreated, setDateCreated] = useState(null);
@@ -32,8 +33,8 @@ function Project(props) {
 
 
   useEffect(() => {
-    db.collection("_tickets").where("project", "==", params.projectId)
-      .onSnapshot(snapshot => {
+    db.collection('tickets').where("projectId", "==", params.projectId)
+    .onSnapshot(snapshot => {
         setTickets(snapshot.docs.map(doc => ({
           id: doc.id, dateCreated: doc.data().dateCreated,
           ticketCreator: doc.data().ticketCreator,
@@ -44,11 +45,11 @@ function Project(props) {
           ticketTitle: doc.data().ticketTitle
         })))
       })
-
   }, [db, params.projectId])
 
+
   const clickHandler = () => {
-    props.history.push(`/${params.projectId}+addTicket`)
+    props.history.push(`/${params.projectId}/addTicket`)
 
   }
   return (
@@ -60,7 +61,7 @@ function Project(props) {
       <p><b>Tickets</b></p>
       {tickets.map((ticket) => (
         <div>
-          <Link to={`tickets/${params.projectId}/${ticket.id}`}>
+          <Link to={`/tickets/${params.projectId}/${ticket.id}`}>
             <p>{ticket.ticketTitle}</p>
             <p>{ticket.ticketStatus}</p>
             <p>{ticket.ticketPriority}</p>

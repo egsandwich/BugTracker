@@ -36,18 +36,6 @@ function CreateProject(props) {
     
     const db = base.firestore();
 
-    useEffect(() => {
-        db.collection('users').where(firestore.FieldPath.documentId(), "!=", currentUser.uid)
-        .onSnapshot(snapshot => {
-            setUsers(snapshot.docs.map(doc=> ({
-                id: doc.id,
-                email: doc.data().email,
-                firstName: doc.data().firstName,
-                lastName: doc.data().lastName,
-                isMember: false,
-            })))
-        })
-    }, [db])
 
 
     //this.setState({ dashboard: false });
@@ -62,15 +50,20 @@ function CreateProject(props) {
         }).then((docRef) => {
             try{
             db.collection('users').doc(currentUser.uid)
-                .update({
-                    isModerator: true
-                })
+            .collection('myProjects').add({
+                projectId: docRef.id,
+                projectName, projectName,
+                owner: true,
+            })
+                
             
             projectMembers.filter(nullChecker).map(member => {
                 db.collection('users').doc(member)
-                .collection('projectsUnder').add(
+                .collection('myProjects').add(
                     {projectId: docRef.id,
-                    projectName: projectName, }
+                    projectName: projectName, 
+                    owner: false,
+                }
                 )})
                 setDashState(!dashState)
                 setProjectName("");

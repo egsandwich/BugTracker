@@ -44,29 +44,26 @@ function CreateTicket(props) {
     const db = base.firestore();
     const createTicket = (event) => {
         event.preventDefault();
-        db.collection("_tickets").add({
+        try{
+        db.collection("tickets").add({
+            projectId: param.projectId,
             ticketTitle: ticketTitle,
             ticketDescription: ticketDescription,
             ticketType: ticketType,
             ticketStatus: ticketStatus,
             ticketPriority: ticketPriority,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-            project: param.projectId,
-            ticketCreator: currentUser.uid,
-        }).then(() => {
+            ticketCreator: currentUser.uid,}).then(() => {
             setFormState(!formState)
             setTicketTitle("")
             setTicketDescription("")
             //push to project instead?
-            props.history.push('/')
+            props.history.push(`/detail/${param.projectId}`)
 
-        }).catch(error => {
-            alert("Please try again")
-            props.history.push(`${param.projectId}/addTicket`)
-        });
+        })} catch(error) {
+            alert("Something went wrong. Please try again");
 
-
-
+        }
 
     }  
 
@@ -95,7 +92,7 @@ function CreateTicket(props) {
                     <option value="Medium">Medium</option>
                     <option value="High">High</option>
                 </select>
-                <button type="submit" disabled={ticketTitle.length == 0 || ticketDescription.length == 0} onClick={createTicket}>
+                <button type="submit" disabled={ticketTitle.length === 0 || ticketDescription.length === 0} onClick={createTicket}>
                     Create Ticket
             </button>
             </form>

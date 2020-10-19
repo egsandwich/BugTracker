@@ -10,7 +10,6 @@ function ProjectList() {
     const { currentUser } = useContext(AuthContext)
     const [done, setDone] = useState(false)
     const db = base.firestore()
-    const [members, setMembers] = useState([""])
 
     useEffect(() => {
 
@@ -25,7 +24,7 @@ function ProjectList() {
     useEffect(() => {
         db.collection('users').doc(currentUser.uid)
         .onSnapshot(snapshot => {
-            snapshot.ref.collection('projectsUnder').onSnapshot(snapshot => {
+            snapshot.ref.collection('myProjects').where("owner", "==", false).onSnapshot(snapshot => {
                 setProjectsBelong(snapshot.docs.map(doc => ({
                     projectId: doc.data().projectId,
                     projectName: doc.data().projectName,
@@ -41,7 +40,7 @@ function ProjectList() {
             <h1>Projects I manage</h1>
             {projectsOwn.map((project) => (
                 <div>
-                    <a href={`/detail=${project.id}`}> <p>Name: {project.projectName} </p></a>
+                    <a href={`/detail/${project.id}`}> <p>Name: {project.projectName} </p></a>
 
                 </div>
             ))}

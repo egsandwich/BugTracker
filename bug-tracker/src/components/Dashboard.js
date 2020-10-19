@@ -18,33 +18,56 @@ function Dashboard(props) {
     //backend
 
     const { currentUser } = useContext(AuthContext)
+    const db = base.firestore();
+    const [tickets, setTickets] = useState([]);
+    const [projects, setProjects] = useState([])
+
 
     useEffect(() => {
-        if (currentUser != null) {
-            if (currentUser.displayName == null) {
-                base.firestore().collection('users').doc(currentUser.uid)
-                    .get().then(doc => {
-                        currentUser.updateProfile({
-                            displayName: doc.data().firstName + " " + doc.data().lastName
-                        })
-                    })
-            }
-        }
+        db.collection('users').doc(currentUser.uid).onSnapshot(snapshot => {
+            snapshot.ref.collection('myProjects').onSnapshot(snapshot => {
+                   setProjects(snapshot.docs.map(doc => ({
+                        projectId: doc.data().projectId,
+                        projectName: doc.data().projectName,
+                        projectOwner: doc.data().projectOwner,
+                    })))
+            })
+        })
     }, [])
 
+    useEffect(() => {
+        projects.map(project => {
+            db.collection('tickets').where("projectId", "==", project.projectId)
+            .onSnapshot(snapshot => {
+                    setTickets(tickets => [... tickets, ... (snapshot.docs.map(doc => ({
+                        ticketId: doc.id,
+                        ticketDescription: doc.data().ticketDescription,
+                        ticketTitle: doc.data().ticketTitle,
+                        ticketCreator: doc.data().ticketCreator,
+                        dateCreated: doc.data().dateCreated,
+                        project: doc.data().projectId,
+                        ticketPriority: doc.data().ticketPriority,
+                        ticketType: doc.data().ticketType,
+                        ticketStatus: doc.data().ticketStatus,
+                    })))])
+                   
+                    })
+        })
+    }, [projects.length > 0])
 
     const logout = () => {
         base.auth().signOut().then(
             props.history.push('/login')
-        )
-    }
+            )
+        }
 
-    return (
-        < Box >
+        return (
+            < Box >
             <Header username={currentUser.displayName} />
-            <ChartPriority />
+            <ChartPriority tickets={tickets }/>
             <ChartStatus />
             <ChartType />
+
             <div>
                 <button onClick={logout}>Logout</button>
             </div>
