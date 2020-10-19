@@ -26,7 +26,9 @@ function Signup(props) {
                         firstName: firstName,
                         lastName: lastName,
                         email: email,
-                        isModerator: false,
+                    })
+                    base.auth().currentUser.updateProfile({
+                        displayName: firstName + " " + lastName 
                     }) 
                     props.history.push('/login')
                    } catch(error) {
