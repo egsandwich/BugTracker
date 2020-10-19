@@ -131,7 +131,7 @@ function App() {
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
           <PrivateRoute path="/myProjects" component={ProjectList} />
-          <PrivateRoute path="/detail=:projectId" component={Project} />
+          <PrivateRoute path="/detail/:projectId" component={Project} />
           <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
           <PrivateRoute path="/tickets/:projectId/:ticketId" component={Ticket} />
           <PrivateRoute path="/myProfile/" component={Profile} />
