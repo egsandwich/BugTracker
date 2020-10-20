@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
@@ -6,7 +6,6 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import CreateProject from "./components/CreateProject";
 import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./components/Dashboard";
-import Drawer from "./components/Drawer";
 import Project from "./components/Project";
 import ProjectList from "./components/ProjectList";
 import Signup from "./components/Signup";
@@ -19,7 +18,6 @@ import {
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
 // import AddIcon from '@material-ui/icons/Add'; //change to something else icon
 import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOutlined';
-import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
 import { AuthProvider } from './components/Auth'

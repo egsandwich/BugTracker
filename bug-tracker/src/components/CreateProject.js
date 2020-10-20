@@ -29,23 +29,33 @@ const useStyles = makeStyles((theme) => ({
 function CreateProject(props) {
     const { currentUser } = useContext(AuthContext)
     const [projectName, setProjectName] = useState("");
-    // const [projectOwner, setProjectOwner] = useState(null);
-    const [users, setUsers] = useState([""]);
-    const [isMember, setIsMember] = useState(false);
+    const [users, setUsers] = useState([]);
     const [projectMembers, setProjectMembers] = useState([null]);
     
     const db = base.firestore();
 
+    useEffect(() => {
+        db.collection('users').where(firebase.firestore.FieldPath.documentId(), "!=", currentUser.uid)
+        .onSnapshot(snapshot=> {
+            setUsers(snapshot.docs.map(doc => ({
+                userId: doc.id,
+                email: doc.data().email,
+                firstName: doc.data().firstName,
+                lastName: doc.data().lastName,
+            })))
+        })
 
+    }, [db.collection('users')])
 
-    //this.setState({ dashboard: false });
-    const [dashState, setDashState] = useState(false);
+    useEffect(() => {
+        console.log(users)
+    }, [users.length > 0])
+
     const createProject = (event) => {
         event.preventDefault();
         db.collection('projects').add({
             projectName: projectName,
             projectOwner: currentUser.uid,
-            //time?  
             dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
         }).then((docRef) => {
             try{
@@ -65,7 +75,6 @@ function CreateProject(props) {
                     owner: false,
                 }
                 )})
-                setDashState(!dashState)
                 setProjectName("");
                 setProjectMembers([""]);
                 props.history.push('/myProjects')
@@ -92,11 +101,7 @@ function CreateProject(props) {
     const handleCheckedValue = (event) => {
         event.preventDefault()
         if(!projectMembers.includes(event.target.value))
-            // if(projectMembers[0] == null)
-            // projectMembers[0] = event.target.value
-            // else
             setProjectMembers([... projectMembers, event.target.value])
-            // setProjectMembers(projectMembers => [... projectMembers, event.target.value])
         else
             alert("already included")
     }
@@ -109,10 +114,11 @@ function CreateProject(props) {
                 <input value={projectName} onChange={(event) => setProjectName(event.target.value)} />
                 <p><label>Add members</label> </p>
                 {users.map(user =>(
-                    <p><button onClick={handleCheckedValue} value={user.id}> Add </button> {user.firstName} {user.lastName} </p>
+                    <p key={user.userId}><button onClick={handleCheckedValue} value={user.userId}> Add </button> {user.firstName} {user.lastName} </p>
                 ))}
+                {/* fix this */}
                 {projectMembers.map(members => (
-                    <p>{members}</p>
+                    <p key={members}>{members}</p>
                 ))}
                 <button onClick={createProject} disabled={projectName.length < 1}>Create project</button>
 

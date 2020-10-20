@@ -62,6 +62,7 @@ function Project(props) {
       {tickets.map((ticket) => (
         <div>
           <Link to={`/tickets/${params.projectId}/${ticket.id}`}>
+            {/* ticket component here */}
             <p>{ticket.ticketTitle}</p>
             <p>{ticket.ticketStatus}</p>
             <p>{ticket.ticketPriority}</p>

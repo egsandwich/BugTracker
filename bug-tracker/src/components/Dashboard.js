@@ -65,8 +65,8 @@ function Dashboard(props) {
             < Box >
             <Header username={currentUser.displayName} />
             <ChartPriority tickets={tickets }/>
-            <ChartStatus />
-            <ChartType />
+            <ChartStatus tickets={tickets}/>
+            <ChartType tickets={tickets}/>
 
             <div>
                 <button onClick={logout}>Logout</button>

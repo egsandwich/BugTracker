@@ -12,15 +12,18 @@ function CommentModal(props) {
     const addComment = (event) => {
         base.firestore().collection("comments").add({
             comment: comment,
-            commenter: currentUser.uid,
+            ticket: props.ticketId, 
+            commenterId: currentUser.uid,
+            commenterName: currentUser.displayName,
             dateCreated: firebase.firestore.FieldValue.serverTimestamp()
 
         }).then(() => {
             setComment("");
-            props.history.push(`${props.projectId}/${props.ticketId}`)
+            props.history.push(`/tickets/${props.projectId}/${props.ticketId}`)
         }
         )
     }
+
     return props.status ? (
         <div>
             <form>
@@ -30,7 +33,6 @@ function CommentModal(props) {
             </form>
         </div>
     ) : <div>
-            active is false
     </div>
 }
 

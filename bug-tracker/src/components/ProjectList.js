@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 import base from './firebase'
-import firebase from 'firebase'
 import { Link, withRouter } from 'react-router-dom'
 import { AuthContext } from './Auth'
 
@@ -8,18 +7,16 @@ function ProjectList() {
     const [projectsOwn, setProjectsOwn] = useState([""]);
     const [projectsBelong, setProjectsBelong] = useState([""]);
     const { currentUser } = useContext(AuthContext)
-    const [done, setDone] = useState(false)
     const db = base.firestore()
 
     useEffect(() => {
-
         db.collection("projects").where("projectOwner", "==", currentUser.uid).onSnapshot(snapshot => {
             setProjectsOwn(snapshot.docs.map(doc => ({
                 id: doc.id, projectName: doc.data().projectName, projectOwner: doc.data().projectOwner
             })))
         })
 
-    }, [])
+    }, [currentUser.uid, db.collection("projects")])
 
     useEffect(() => {
         db.collection('users').doc(currentUser.uid)
@@ -32,7 +29,7 @@ function ProjectList() {
             })
         })
         
-    }, [])
+    }, [currentUser.uid, db])
 
 
     return (

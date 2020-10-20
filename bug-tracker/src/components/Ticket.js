@@ -33,11 +33,12 @@ function Ticket(props) {
     const [ticketStatus, setTicketStatus] = useState("");
     const [ticketType, setTicketType] = useState("");
     const [active, setActive] = useState(false);
+    const [comments, setComments] = useState([])
 
     const params = useParams();
 
     useEffect(() => {
-        db.collection('_tickets').where(firebase.firestore.FieldPath.documentId(), "==", params.ticketId)
+        db.collection('tickets').where(firebase.firestore.FieldPath.documentId(), "==", params.ticketId)
             .onSnapshot(snapshot => snapshot.docs.forEach(doc => {
                 setTicketTitle(doc.data().ticketTitle)
                 setTicketDescription(doc.data().ticketDescription)
@@ -45,16 +46,26 @@ function Ticket(props) {
                 setTicketStatus(doc.data().ticketStatus)
                 setTicketType(doc.data().ticketType)
                 db.collection("users").where(firebase.firestore.FieldPath.documentId(), "==", doc.data().ticketCreator)
-                    .onSnapshot(snapshot => snapshot.docs.map(doc => {
+                    .onSnapshot(snapshot => {snapshot.docs.map(doc => {
                         setTicketCreator(doc.data().firstName + " " + doc.data().lastName)
-                    }))
+                    })})
             }))
-    }, [db, params.ticketId])
+    }, [db.collection('tickets'), params.ticketId])
+
+    useEffect(() => {
+        db.collection('comments').where("ticket", "==", params.ticketId)
+        .onSnapshot(snapshot => {
+            setComments(snapshot.docs.map(doc => ({
+                commentId: doc.id,
+                comment: doc.data().comment,
+                commenterName: doc.data().commenterName,
+                dateCreated: doc.data().dateCreated,
+            })))
+        })
+    }, [db.collection('comments')])
 
     const addCommentHandler = () => {
-        // db.collection('comments').add({
-
-        // })
+       
         setActive(!active)
     }
     const classes = useStyles();
@@ -73,9 +84,13 @@ function Ticket(props) {
             <p>{ticketPriority} </p>
             <p>{ticketStatus} </p>
             <p>{ticketType} </p>
-
+                {comments.map(comment => (
+                    <div key={comment.commentId}>
+                        <p>{comment.comment} </p>
+                        </div>
+                ))}
             <button onClick={addCommentHandler}>Add comment</button>
-            <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} />
+            <CommentModal status={active} key={params.ticketId} ticketId={params.ticketId} projectId={params.projectId} />
         </div>
     )
 }
