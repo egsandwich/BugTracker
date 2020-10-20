@@ -1,49 +1,40 @@
 import React, { useEffect, useState } from 'react'
-import base from "./firebase";
 
 
-
-const db = base.firestore();
-function ChartStatus() {
+function ChartStatus(props) {
     const [openCount, setOpenCount] = useState(0);
     const [inProgressCount, setInProgressCount] = useState(0);
     const [resolvedCount, setResolvedCount] = useState(0);
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketStatus", "==", 'Open')
-            .get()
-            .then(snapshot => {
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketStatus === "Open")
+        setOpenCount(temp.length)
+    }, [props.tickets])
 
-                setOpenCount(snapshot.size)
-            })
-    }, [])
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketStatus === "In progress")
+        setInProgressCount(temp.length)
+    }, [props.tickets])
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketStatus", "==", 'In progress')
-            .get()
-            .then(snapshot => {
-                setInProgressCount(snapshot.size);
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketStatus === "Resolved")
+        setResolvedCount(temp.length)
+    }, [props.tickets])
 
+    // useEffect(() => {
+    //     props.tickets.map(ticket => {
+    //         console.log(ticket)
+    //     })
+    // }, [[props.tickets]])
 
-            })
-    }, [])
-
-    useEffect(() => {
-        db.collection('_tickets').where("ticketStatus", "==", 'Resolved')
-            .get()
-            .then(snapshot => {
-                setResolvedCount(snapshot.size)
-            })
-    }, [
-        //db here?
-    ])
+   
 
     return (
         <div>
             <p>Tickets by status</p>
-            <p>Low : {openCount}</p>
-            <p> Medium : {inProgressCount}</p>
-            <p>High : {resolvedCount}</p>
+            <p>Open: {openCount}</p>
+            <p>In progress: {inProgressCount}</p>
+            <p>Resolved: {resolvedCount}</p>
         </div>
     )
 }

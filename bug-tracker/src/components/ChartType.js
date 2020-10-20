@@ -1,30 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import base from './firebase'
 
-const db = base.firestore()
-function ChartType() {
+function ChartType(props) {
+
     const [errorBugCount, setErrorBugCount] = useState(0);
     const [requestCount, setRequestCount] = useState(0);
 
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketType === "Bug/Error")
+        setErrorBugCount(temp.length)
+    }, [props.tickets])
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketType", "==", 'Bug/Error')
-            .get()
-            .then(snapshot => {
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketType === "Request")
+        setRequestCount(temp.length)
+    }, [props.tickets])
 
-                setErrorBugCount(snapshot.size)
-            })
-    }, [])
-
-    useEffect(() => {
-        db.collection('_tickets').where("ticketType", "==", 'Request')
-            .get()
-            .then(snapshot => {
-                setRequestCount(snapshot.size);
-
-
-            })
-    }, [])
 
 
     return (

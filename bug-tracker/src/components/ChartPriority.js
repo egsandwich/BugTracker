@@ -1,18 +1,25 @@
 import React, { useEffect, useState } from 'react'
-import base from "./firebase";
-import firebase from 'firebase'
 
 
 function ChartPriority(props) {
-    const db = base.firestore();
     const [lowCount, setLowCount] = useState(0);
     const [mediumCount, setMediumCount] = useState(0);
     const [highCount, setHighCount] = useState(0);
 
 
     useEffect(()=>{
-        const tempLow = props.tickets.filter(ticket => ticket.ticketPriority == "Low")
-        setLowCount(tempLow.length)
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "Low")
+        setLowCount(temp.length)
+    }, [props.tickets])
+
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "Medium")
+        setMediumCount(temp.length)
+
+    }, [props.tickets])
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "High")
+        setHighCount(temp.length)
     }, [props.tickets])
 
 
