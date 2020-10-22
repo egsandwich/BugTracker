@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import { FastfoodOutlined } from "@material-ui/icons";
 
 //props = project component
 function CreateTicket(props) {
@@ -37,8 +38,7 @@ function CreateTicket(props) {
     // const [ticketCreator, setTicketCreator] = useState(null)
     const [formState, setFormState] = useState(false);
     const { currentUser } = useContext(AuthContext)
-
-
+ 
 
     const param = useParams();
     const db = base.firestore();
@@ -67,7 +67,7 @@ function CreateTicket(props) {
 
     }  
 
-
+    
     return (
         <div>
             <form>
@@ -127,7 +127,7 @@ function CreateTicket(props) {
             {/* redirect to ticket summary? */}
             {/* { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />} */}
         </div >
-    )
+    ) 
 }
 
 export default withRouter(CreateTicket);

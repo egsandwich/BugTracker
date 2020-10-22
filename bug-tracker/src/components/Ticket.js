@@ -9,6 +9,7 @@ import { Link, withRouter, useParams } from "react-router-dom";
 import base from './firebase'
 import firebase from 'firebase'
 import CommentModal from './CommentModal'
+import EditTicketModal from './EditTicketModal';
 const useStyles = makeStyles((theme) => ({
     root: {
         backgroundColor: theme.palette.primary.main,
@@ -34,6 +35,7 @@ function Ticket(props) {
     const [ticketType, setTicketType] = useState("");
     const [active, setActive] = useState(false);
     const [comments, setComments] = useState([])
+    const [editActivate, setEditActivate] = useState(false);
 
     const params = useParams();
 
@@ -50,7 +52,7 @@ function Ticket(props) {
                         setTicketCreator(doc.data().firstName + " " + doc.data().lastName)
                     })})
             }))
-    }, [db.collection('tickets'), params.ticketId])
+    }, [db.collection('tickets').doc(params.ticketId)])
 
     useEffect(() => {
         db.collection('comments').where("ticket", "==", params.ticketId)
@@ -62,11 +64,15 @@ function Ticket(props) {
                 dateCreated: doc.data().dateCreated,
             })))
         })
-    }, [db.collection('comments')])
+    }, [db.collection('comments').where("ticket", "==", params.ticketId)])
+
 
     const addCommentHandler = () => {
-       
         setActive(!active)
+    }
+
+    const editTicketHandler = () => {
+         setEditActivate(!editActivate)
     }
     const classes = useStyles();
 
@@ -91,6 +97,8 @@ function Ticket(props) {
                 ))}
             <button onClick={addCommentHandler}>Add comment</button>
             <CommentModal status={active} key={params.ticketId} ticketId={params.ticketId} projectId={params.projectId} />
+            <button hidden={editActivate} onClick={editTicketHandler}>Edit</button>
+            <EditTicketModal status={editActivate} ticketId={params.ticketId}/>
         </div>
     )
 }
