@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 function CreateProject(props) {
     const { currentUser } = useContext(AuthContext)
     const [projectName, setProjectName] = useState("");
-    const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([""]);
     const [projectMembers, setProjectMembers] = useState([null]);
     
     const db = base.firestore();
@@ -65,8 +65,6 @@ function CreateProject(props) {
                 projectName, projectName,
                 owner: true,
             })
-                
-            
             projectMembers.filter(nullChecker).map(member => {
                 db.collection('users').doc(member)
                 .collection('myProjects').add(
