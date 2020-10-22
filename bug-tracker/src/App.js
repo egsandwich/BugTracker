@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import "./App.css";
 import Contact from "./components/Contact";
 import Login from "./components/Login";
@@ -6,8 +6,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import CreateProject from "./components/CreateProject";
 import CreateTicket from "./components/CreateTicket";
 import Dashboard from "./components/Dashboard";
-import Drawer from "./components/Drawer";
 import Project from "./components/Project";
+import ProjectList from "./components/ProjectList";
 import Signup from "./components/Signup";
 import NavBar from "./components/NavBar";
 import {
@@ -18,12 +18,12 @@ import {
 import HomeIcon from '@material-ui/icons/Home'; //change to home icon
 // import AddIcon from '@material-ui/icons/Add'; //change to something else icon
 import { AddCircleOutlinedIcon as AddIcon } from '@material-ui/icons/AddCircleOutlined';
-import MenuIcon from '@material-ui/icons/Menu';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import clsx from 'clsx';
-import firebase from './components/firebase'
 import { AuthProvider } from './components/Auth'
 import PrivateRoute from './components/PrivateRoute'
+import Profile from './components/Profile'
+import Ticket from "./components/Ticket";
 // ---------------------------------------------------------
 
 const drawerWidth = 240;
@@ -124,15 +124,17 @@ function App() {
     <AuthProvider>
       <Router>
         <CssBaseline /> {/*removes default padding */}
-        {/* if logged in show dashboard */}
         <NavBar />
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
-          <PrivateRoute path="/projects/:projectId" component={Project} />
+          <PrivateRoute path="/myProjects" component={ProjectList} />
+          <PrivateRoute path="/detail/:projectId" component={Project} />
+          <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
+          <PrivateRoute path="/tickets/:projectId/:ticketId" component={Ticket} />
+          <PrivateRoute path="/myProfile/" component={Profile} />
           <Route path="/login" component={Login} />
           <PrivateRoute path="/addProject" component={CreateProject} />
-          <PrivateRoute path="/:projectId/registerTicket" component={CreateTicket} />
           <PrivateRoute path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>

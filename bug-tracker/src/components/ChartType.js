@@ -1,59 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-function ChartType() {
+function ChartType(props) {
+
     const [errorBugCount, setErrorBugCount] = useState(0);
     const [requestCount, setRequestCount] = useState(0);
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketType", "==", 'High')
-            .get()
-            .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setHighCount(highCount + 1);
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketType === "Bug/Error")
+        setErrorBugCount(temp.length)
+    }, [props.tickets])
 
-                }
-                )
-            })
-    }, [])
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketType === "Request")
+        setRequestCount(temp.length)
+    }, [props.tickets])
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Medium')
-            .get()
-            .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setMediumCount(mediumCount + 1);
 
-                }
-                )
-            })
-    }, [])
-
-    useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Low')
-            .get()
-            .then(snapshot => {
-                snapshot.docs.map(doc => {
-                    setLowCount(lowCount + 1);
-
-                }
-                )
-            })
-    }, [])
 
     return (
         <div>
-            <p>Tickets by priority</p>
-            <p>Low : {lowCount}</p>
-            <p> Medium : {mediumCount}</p>
-            <p>High : {highCount}</p>
+            <p>Tickets by type</p>
+            <p>Bug/Error : {errorBugCount}</p>
+            <p> Request : {requestCount}</p>
         </div>
     )
 }
-return (
-    <div>
 
-    </div>
-)
-}
+
 
 export default ChartType

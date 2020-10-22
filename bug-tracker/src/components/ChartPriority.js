@@ -1,42 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import firebase from "./firebase";
 
 
-
-function ChartPriority() {
+function ChartPriority(props) {
     const [lowCount, setLowCount] = useState(0);
     const [mediumCount, setMediumCount] = useState(0);
     const [highCount, setHighCount] = useState(0);
-    const db = firebase.firestore();
-    const [temp, setTemp] = useState([])
-
-    useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'High')
-            .get()
-            .then(snapshot => {
-
-                setHighCount(snapshot.size)
-            })
-    }, [])
-
-    useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Medium')
-            .get()
-            .then(snapshot => {
-                setMediumCount(snapshot.size);
 
 
-            })
-    }, [])
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "Low")
+        setLowCount(temp.length)
+    }, [props.tickets])
 
-    useEffect(() => {
-        db.collection('_tickets').where("ticketPriority", "==", 'Low')
-            .get()
-            .then(snapshot => {
-                setLowCount(snapshot.size)
-            })
-    }, [])
-    // console.log(temp.length)
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "Medium")
+        setMediumCount(temp.length)
+
+    }, [props.tickets])
+    useEffect(()=>{
+        const temp = props.tickets.filter(ticket => ticket.ticketPriority === "High")
+        setHighCount(temp.length)
+    }, [props.tickets])
+
 
     return (
         <div>
