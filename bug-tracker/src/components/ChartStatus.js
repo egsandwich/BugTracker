@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Bar} from 'react-chartjs-2'
 
 
 function ChartStatus(props) {
@@ -21,20 +22,32 @@ function ChartStatus(props) {
         setResolvedCount(temp.length)
     }, [props.tickets])
 
-    // useEffect(() => {
-    //     props.tickets.map(ticket => {
-    //         console.log(ticket)
-    //     })
-    // }, [[props.tickets]])
+    const data = {
+        labels: ['Open', 'In progress', 'Resolved'],
+            datasets: [
+                {
+                    label: 'Number of tickets',
+                    data: [openCount, inProgressCount, resolvedCount],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(75, 192, 192, 0.2)', 
+                    ], 
+                    borderWidth : 1
+                }
+            ]
+    }
+
+    const options = {
+        responsive: true
+    }
 
    
 
     return (
         <div>
             <p>Tickets by status</p>
-            <p>Open: {openCount}</p>
-            <p>In progress: {inProgressCount}</p>
-            <p>Resolved: {resolvedCount}</p>
+            <Bar data={data} options={options}/>
         </div>
     )
 }

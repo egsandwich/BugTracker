@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import {Bar} from 'react-chartjs-2';
 
 
 function ChartPriority(props) {
@@ -6,6 +7,7 @@ function ChartPriority(props) {
     const [mediumCount, setMediumCount] = useState(0);
     const [highCount, setHighCount] = useState(0);
 
+ 
 
     useEffect(()=>{
         const temp = props.tickets.filter(ticket => ticket.ticketPriority === "Low")
@@ -22,15 +24,58 @@ function ChartPriority(props) {
         setHighCount(temp.length)
     }, [props.tickets])
 
+    const chart =  {
+       
+            labels: ['Low', 'Medium', 'High'],
+            datasets: [
+                {
+                    label: 'Number of tickets',
+                    data: [lowCount, mediumCount, highCount],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                    ], 
+                    borderWidth : 1
+                }
+            ]
+       
+ }
+
+ const options = {
+     responsive: true,
+     yAxes : [
+         {
+             ticks: {
+                 autoSkip: true,
+                 beginAtZero: true
+             }, 
+             gridLines: {
+                 drawBorder: true,
+                 display: false
+             }
+         }
+     ],
+     xAxes: [
+         {
+             gridLines: {
+                 display: false
+             }
+         }
+     ]
+ }
+
 
     return (
         <div>
-            <p>Tickets by priority</p>
-            <p>Low : {lowCount}</p>
-            <p> Medium : {mediumCount}</p>
-            <p>High : {highCount}</p>
+            <h1>Tickets by priority</h1>
+            <div>
+                <Bar data={chart} options={options}/>
+            </div>
+          
         </div>
     )
 }
 
 export default ChartPriority;
+
