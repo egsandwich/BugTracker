@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import base from './firebase'
 import { withRouter } from 'react-router-dom'
+import { Grid, Typography, Paper, Card, Button, Input, Box,FormControl } from '@material-ui/core'
+
 
 
 function Signup(props) {
@@ -59,18 +61,36 @@ function Signup(props) {
 
     return (
         <div>
+            <Box m={2}>
+            <Grid container layout='row' spacing={3}>
+                <Grid container justify="space-between">
+                <Grid item xl={6} xs={6}>
+                    <Typography variant="h4">Sign up</Typography>
+                </Grid>
+                    <Button  variant="contained" href="/login">Log In</Button>
+                </Grid>
+            <Box m={1}>
             <form>
-                <p> <label>First Name:</label> </p>
-                <p> <input value={firstName} onChange={(event) => setFirstName(event.target.value)} />  </p>
-                <p> <label>Last Name:</label> </p>
-                <p> <input value={lastName} onChange={(event) => setLastName(event.target.value)} />  </p>
-                <p> <label>Email:</label> </p>
-                <p> <input value={email} onChange={(event) => setEmail(event.target.value)} />  </p>
-                <p> <label>Password:</label> </p>
-                <p> <input type="password" value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
-                <p><button type="submit" disabled={nullChecker(firstName, lastName, email, password)}onClick={onRegister}>Sign up</button></p>
-            </form>
+                <Grid item xs={12}>
+                    <p> <Input placeholder="First name" required="true" value={firstName} onChange={(event) => setFirstName(event.target.value)} />  </p>
+                </Grid>
 
+                <Grid item xs={12}>
+                    <p> <Input placeholder="Last name" required="true" value={lastName} onChange={(event) => setLastName(event.target.value)} />  </p>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <p> <Input placeholder="Email address" required="true" type="email" value={email} onChange={(event) => setEmail(event.target.value)} />  </p>
+                </Grid>
+                
+                <Grid item xs={12}>
+                    <p> <Input placeholder="Password" required="true" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
+                </Grid>
+                <p><Button variant="contained" type="submit" >Sign up</Button></p>
+            </form>
+            </Box>
+            </Grid>
+            </Box>
         </div>
     )
 }
