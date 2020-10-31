@@ -2,11 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import base from "./firebase";
 import { AuthContext } from './Auth'
 import firebase from 'firebase'
-import {
-    Redirect, useParams, Route, Link, withRouter
-} from "react-router-dom";
+import {useParams, withRouter} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
-import FilledInput from '@material-ui/core/FilledInput';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Input from '@material-ui/core/Input';
@@ -14,15 +11,11 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
-import { FastfoodOutlined } from "@material-ui/icons";
+import {Grid, Box, Select, MenuItem} from '@material-ui/core/';
 
 //props = project component
 function CreateTicket(props) {
-    //     const
-    // }
-    /*EDIT THIS OUT */
-    // function CreateTicket() {
+   
     const [tickets, setTickets] = useState([{
         ticketTitle: "title",
         ticketDescription: "description",
@@ -35,7 +28,6 @@ function CreateTicket(props) {
     const [ticketTitle, setTicketTitle] = useState("");
     const [ticketDescription, setTicketDescription] = useState("");
     const [ticketPriority, setTicketPriority] = useState("Low");
-    // const [ticketCreator, setTicketCreator] = useState(null)
     const [formState, setFormState] = useState(false);
     const { currentUser } = useContext(AuthContext)
  
@@ -57,7 +49,6 @@ function CreateTicket(props) {
             setFormState(!formState)
             setTicketTitle("")
             setTicketDescription("")
-            //push to project instead?
             props.history.push(`/detail/${param.projectId}`)
 
         })} catch(error) {
@@ -70,62 +61,67 @@ function CreateTicket(props) {
     
     return (
         <div>
-            <form>
-                <label>Title</label>
-                <input type="text" value={ticketTitle} onChange={(event) => setTicketTitle(event.target.value)} />
-                <label> Description</label>
-                <input type="text" value={ticketDescription} onChange={(event) => setTicketDescription(event.target.value)} />
-                <label>Type</label>
-                <select value={ticketType} onChange={(event) => setTicketType(event.target.value)}>
-                    <option selected value="Bug/Error">Bug/Error</option>
-                    <option value="Request">Request</option>
-                </select>
-                <label>Status</label>
-                <select value={ticketStatus} onChange={(event) => setTicketStatus(event.target.value)}>
-                    <option selected value="Open">Open</option>
-                    <option value="In progress">In progress</option>
-                    <option value="Resolved">Resolved</option>
-                </select>
-                <label>Priority</label>
-                <select value={ticketPriority} onChange={(event) => setTicketPriority(event.target.value)}>
-                    <option selected value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-                <button type="submit" disabled={ticketTitle.length === 0 || ticketDescription.length === 0} onClick={createTicket}>
-                    Create Ticket
-            </button>
-            </form>
+            <Box m={2} flexGrow={1}>
+            <Grid container spacing={3}>
+            <Grid item xs={12} >
+                    <Typography variant="h4">Add Ticket </Typography>
+            </Grid>       
+                <form>
+                    <Grid item container spacing={2}>
+                    <Grid item xs={12}>
+                    <FormControl>
+                        <InputLabel>Title</InputLabel>
+                        <Input type="text" value={ticketTitle} onChange={(event) => setTicketTitle(event.target.value)} />
+                        </FormControl>
+                    </Grid>
 
+                    <Grid item xs={12}>
+                        <FormControl>
+                        <InputLabel> Description</InputLabel>
+                        <Input type="text" value={ticketDescription} onChange={(event) => setTicketDescription(event.target.value)} />
+                        </FormControl>
+                    </Grid>
+                    
+                    <Grid item xs={3}>
+                    <InputLabel>Type</InputLabel>
+                    <FormControl>
+                    <Select id="ticketType" value={ticketType} onChange={(event) => setTicketType(event.target.value)}>
+                        <MenuItem value="Bug/Error">Bug/Error</MenuItem>
+                        <MenuItem value="Request">Request</MenuItem>
+                    </Select>
+                    </FormControl>
+                    </Grid>
 
-            {/* <Typography variant="h3">Add ticket</Typography>
-            <form>
-                <FormControl>
-                    <InputLabel>Description</InputLabel>
-                    <Input id="component-simple"
-                        value={ticketDescription}
-                        onChange={(event) => setTicketDescription(event.target.value)}
-                    />
-                </FormControl>
-                <Button variant="contained" type="submit" onClick={createTicket}>
-                    Create Ticket
-            </Button>
-            </form>*/
-            /* {tickets.map((ticket) => (
-                <div>
-                    <p> title: {ticket.ticketTitle}</p>
-                    <p>description: {ticket.ticketDescription} </p>
-                    <p> type: {ticket.ticketType} </p>
-                    <p>status: {ticket.ticketStatus} </p>
-                </div>
+                    <Grid item xs={3}>
+                    <InputLabel>Status</InputLabel>
+                    <FormControl>
+                    <Select value={ticketStatus} onChange={(event) => setTicketStatus(event.target.value)}>
+                        <MenuItem value="Open">Open</MenuItem>
+                        <MenuItem value="In progress">In progress</MenuItem>
+                        <MenuItem value="Resolved">Resolved</MenuItem>
+                    </Select>
+                    </FormControl>
+                    </Grid>
 
-            )
-
-            )}
-        
-            ); */}
-            {/* redirect to ticket summary? */}
-            {/* { formState ? <Redirect to={'/'} /> : <Route path={`${param.projectId}/registerTicket`} />} */}
+                    <Grid item xs={3}>
+                    <InputLabel>Priority</InputLabel>
+                    <FormControl>
+                    <Select value={ticketPriority} onChange={(event) => setTicketPriority(event.target.value)}>
+                        <MenuItem value="Low">Low</MenuItem>
+                        <MenuItem value="Medium">Medium</MenuItem>
+                        <MenuItem value="High">High</MenuItem>
+                    </Select>
+                    </FormControl>
+                    </Grid>  
+                </Grid>
+                </form>
+                <Grid item xs={12} >
+                <Button variant="contained" type="submit" disabled={ticketTitle.length === 0 || ticketDescription.length === 0} onClick={createTicket}>
+                        Create Ticket
+                </Button>
+                </Grid> 
+            </Grid>
+            </Box>
         </div >
     ) 
 }
