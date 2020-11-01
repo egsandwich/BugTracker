@@ -78,15 +78,14 @@ function Ticket(props) {
     }
     const classes = useStyles();
 
-    //useEffect get details 
     return (
-            <Box>
+            <Box padding={4}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                     <Typography variant="h4">Details</Typography>
                     </Grid>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={2} xl={12}></Grid>
+                    <Grid item xs={12} m={10} l={6} xl={6} >
                     <Card>
                         <CardContent>
                         <Typography variant="overline">Title:</Typography>
@@ -114,9 +113,9 @@ function Ticket(props) {
                         </CardContent>
                     </Card>
                     </Grid>
-                    <Grid item xs={2}></Grid>
-
-                    <Grid item xs={3}> 
+                    <Grid item xs={2} xl={12}></Grid>
+                    
+                    <Grid item xs={8} m={8} l={6} xl={6}> 
                         <Typography variant="subtitle1">Comments</Typography>
                     <Card>
                         {comments.map(comment => (
@@ -144,6 +143,7 @@ function Comment(props){
     useEffect(() => {
         setDateConvert(dateCreated.seconds * 1000)
     }, [dateCreated!= null])
+    
     return (
         <Paper variant="outlined" square>
         <CardContent>

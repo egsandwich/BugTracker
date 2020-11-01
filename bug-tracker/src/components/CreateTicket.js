@@ -62,7 +62,7 @@ function CreateTicket(props) {
     return (
         <div>
             <Box m={2} flexGrow={1}>
-            <Grid container spacing={3}>
+            <Grid container>
             <Grid item xs={12} >
                     <Typography variant="h4">Add Ticket </Typography>
             </Grid>       

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import base from './firebase';
 import firebase from 'firebase';
 import { withRouter, useParams, Link, Redirect } from "react-router-dom";
-import { Grid, Typography, Paper, Card, Button, Link as LinkUI } from '@material-ui/core'
+import { Grid, Box, Typography, Paper, Card, Button, Link as LinkUI, CardContent, CardActionArea, CardActions } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 // import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
@@ -54,22 +54,24 @@ function Project(props) {
   }
   return (
     <div>
-      <p>{nameOfProj}</p>
-      <p>Date created: {new Date(dateCreated).toLocaleDateString('no-NO')}</p>
-      <p><button onClick={clickHandler}>Add Ticket</button></p>
-      <></>
-      <p><b>Tickets</b></p>
+      <Box m={3}>
+      <Grid container>
+        <Grid item xs={12}>
+        <Typography variant="h6">{nameOfProj}</Typography>
+        </Grid>
+        <Typography variant="subtitle1">Date created: {new Date(dateCreated).toLocaleDateString('no-NO')}</Typography>
+        <Grid item xs={12}>
+        <Button variant="contained" onClick={clickHandler}>Add Ticket</Button>
+        </Grid>
+      </Grid>
       {tickets.map((ticket) => (
-        <div>
-          <Link to={`/tickets/${params.projectId}/${ticket.id}`}>
-            {/* ticket component here */}
-            <p>{ticket.ticketTitle}</p>
-            <p>{ticket.ticketStatus}</p>
-            <p>{ticket.ticketPriority}</p>
-            <p>{ticket.ticketType}</p>
-          </Link>
-        </div>
+        <Grid item key={ticket.id}>
+          <div>
+           <TicketListItem item ={ticket}/>
+           </div>
+        </Grid>
       ))}
+      </Box>
     </div >
   );
 }
@@ -77,6 +79,30 @@ function Project(props) {
 
 
 export default withRouter(Project);
+
+function TicketListItem(props){
+  const{id, ticketTitle, ticketPriority, ticketStatus,ticketType} = props.item
+
+  const params = useParams();
+  const linkRef=`/tickets/${params.projectId}/${id}`;
+  
+  return (
+    <Card>
+      <CardContent>
+      <Typography>{ticketTitle}</Typography>
+      <Typography>Status: {ticketStatus}</Typography>
+      <Typography>Priority: {ticketPriority}</Typography>
+      <Typography>Type: {ticketType}</Typography>
+      <CardActionArea>
+        <CardActions>
+          <Button variant="contained" size="small" href={linkRef}>Learn more</Button>
+        </CardActions>
+      </CardActionArea>
+      </CardContent>
+    </Card>
+  );
+
+}
 
 {/* <Grid className={classes.gridHeader}>
 <Grid container spacing={2}>
