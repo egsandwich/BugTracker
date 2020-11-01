@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import { Link as LinkUI } from '@material-ui/core/';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import { Link as LinkUI, Typography, Box, Grid, Card, CardContent, CardActionArea, CardActions, Button, Paper} from '@material-ui/core/';
 import { grey, } from '@material-ui/core/colors';
 import { Link, withRouter, useParams } from "react-router-dom";
 import base from './firebase'
@@ -64,7 +61,12 @@ function Ticket(props) {
                 dateCreated: doc.data().dateCreated,
             })))
         })
-    }, [db.collection('comments').where("ticket", "==", params.ticketId)])
+            
+    }, [db.collection('comments')])
+
+    useEffect(() => {
+      console.log(comments)
+    },[])
 
 
     const addCommentHandler = () => {
@@ -78,29 +80,85 @@ function Ticket(props) {
 
     //useEffect get details 
     return (
-        <div>
-            {/* <Card className={classes.root}>
-                <Typography variant="h5" component="h1" className={classes.title} noWrap="true">
-                    {props.description}
-                </Typography>
-            </Card> */}
-            <p>{ticketTitle}</p>
-            <p>{ticketCreator} </p>
-            <p>{ticketDescription}</p>
-            <p>{ticketPriority} </p>
-            <p>{ticketStatus} </p>
-            <p>{ticketType} </p>
-                {comments.map(comment => (
-                    <div key={comment.commentId}>
-                        <p>{comment.comment} </p>
-                        </div>
-                ))}
-            <button onClick={addCommentHandler}>Add comment</button>
-            <CommentModal status={active} key={params.ticketId} ticketId={params.ticketId} projectId={params.projectId} />
-            <button hidden={editActivate} onClick={editTicketHandler}>Edit</button>
-            <EditTicketModal status={editActivate} ticketId={params.ticketId}/>
-        </div>
+            <Box>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                    <Typography variant="h4">Details</Typography>
+                    </Grid>
+                    <Grid item xs={2}></Grid>
+                    <Grid item xs={3}>
+                    <Card>
+                        <CardContent>
+                        <Typography variant="overline">Title:</Typography>
+                        <Typography variant="h6"> {ticketTitle} </Typography>
+                        <Typography variant="overline"> Creator: </Typography>
+                        <Typography>{ticketCreator} </Typography>
+                        <Typography variant="overline"> Description: </Typography>
+                        <Typography>{ticketDescription}</Typography>
+                        <Typography variant="overline"> Priority: </Typography>
+                        <Typography> {ticketPriority} </Typography>
+                        <Typography variant="overline"> Status: </Typography>
+                        <Typography>{ticketStatus} </Typography>
+                        <Typography variant="overline"> Type: </Typography>
+                        <Typography>{ticketType} </Typography>
+                        <CardActionArea>
+                            <CardActions>
+                                <Button size="small" color="primary" hidden={editActivate} onClick={editTicketHandler}>
+                                    {editActivate ? 'Close' : 'Edit'}
+                                </Button>
+                                <Button onClick={addCommentHandler} size="small" color="primary" hidden={active}>
+                                    {active ? 'Close' : 'Add comment'}
+                                </Button>
+                            </CardActions>
+                        </CardActionArea>
+                        </CardContent>
+                    </Card>
+                    </Grid>
+                    <Grid item xs={2}></Grid>
+
+                    <Grid item xs={3}> 
+                        <Typography variant="subtitle1">Comments</Typography>
+                    <Card>
+                        {comments.map(comment => (
+                            <Comment key={comment.commentId} comment={comment}>
+                                <p>{comment.comment} </p>
+                                </Comment>
+                        ))}
+                    </Card>
+                    </Grid>
+                    <Grid container item>
+                    
+                    <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} />
+                    
+                    <EditTicketModal status={editActivate} ticketId={params.ticketId}/>
+                    </Grid>
+                </Grid>
+            </Box>
     )
+}
+
+function Comment(props){
+    const {comment, commentId, commenterName, dateCreated} = props.comment;
+    const [dateConvert, setDateConvert] = useState();
+
+    useEffect(() => {
+        setDateConvert(dateCreated.seconds * 1000)
+    }, [dateCreated!= null])
+    return (
+        <Paper variant="outlined" square>
+        <CardContent>
+            <Typography variant="subtitle2">
+                {commenterName}:
+            </Typography>
+            <Typography variant="body1">
+            {comment}
+            </Typography>
+            <Typography variant="caption">
+            {new Date(dateConvert).toLocaleDateString('no-NO')}
+            </Typography>
+        </CardContent>
+        </Paper>
+    );
 }
 
 export default withRouter(Ticket)
