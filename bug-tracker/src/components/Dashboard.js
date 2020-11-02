@@ -6,7 +6,6 @@ import base from "./firebase";
 import firebase from 'firebase'
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI, Box } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-// import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import { BrowserRouter as Router, Switch, Route, Link, withRouter } from 'react-router-dom';
 import ChartPriority from "./ChartPriority";
@@ -55,7 +54,7 @@ function Dashboard(props) {
         })
     }, [projects.length > 0])
 
-    const logout = () => {
+     const logout = () => {
         base.auth().signOut().then(
             props.history.push('/login')
             )
@@ -63,7 +62,8 @@ function Dashboard(props) {
 
         return (
             < Box >
-            <Header username={currentUser.displayName} />
+            {currentUser.displayName}
+            {/* <Header username={currentUser.displayName} /> */}
             <ChartPriority tickets={tickets }/>
             <ChartStatus tickets={tickets}/>
             <ChartType tickets={tickets}/>
