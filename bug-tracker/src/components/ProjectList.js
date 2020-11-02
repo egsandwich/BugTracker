@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react'
 import base from './firebase'
 import { Link, withRouter } from 'react-router-dom'
+import { Typography, Box, Grid, Card, CardContent, CardActionArea, CardActions, Button, Paper, MenuItem, ListItemText} from '@material-ui/core/';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import { AuthContext } from './Auth'
 
-function ProjectList() {
+function ProjectList(props) {
     const [projectsOwn, setProjectsOwn] = useState([""]);
     const [projectsBelong, setProjectsBelong] = useState([""]);
     const { currentUser } = useContext(AuthContext)
@@ -34,20 +36,47 @@ function ProjectList() {
 
     return (
         <div>
-            <h1>Projects I manage</h1>
+            <Box m={3}>
+            <Grid container spacing={4}>
+            <Grid item xs={12} >
+            <Typography variant="h6">Projects I manage</Typography>
             {projectsOwn.map((project) => (
-                <div>
-                    <a href={`/detail/${project.id}`}> <p>Name: {project.projectName} </p></a>
+                <div key={project.id}>
+                    <Card>
+                        <CardContent>
+                                <Typography variant="body1">{project.projectName}</Typography>
+                                <CardActionArea>
+                                <CardActions>
+                                    <Button href={`/detail/${project.id}`}>Details</Button>
+                                </CardActions>
+                            </CardActionArea>
+                        </CardContent>
+                    </Card>
+                </div>
+            ))}
+            </Grid>
 
-                </div>
-            ))}
-            <></>
-            <h1>Projects I belong in</h1>
+            <Grid item xs={12} >
+            <AssignmentIcon/>    
+            <Typography variant="h6">Projects I belong in
+            </Typography>
             {projectsBelong.map((project) => (
-                <div>
-                    {project.projectName}
+                <div key={project.projectId}>
+                    <Card>
+                        <CardContent>
+                                <Typography variant="body1">{project.projectName}</Typography>
+                                <CardActionArea>
+                                <CardActions>
+                                    <Button href={`/detail/${project.projectId}`}>Details</Button>
+                                </CardActions>
+                            </CardActionArea>
+                        </CardContent>
+                    </Card>
                 </div>
             ))}
+            </Grid>
+            </Grid>
+            </Box>
         </div>
     )
 }
