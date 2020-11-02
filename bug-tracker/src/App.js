@@ -10,6 +10,8 @@ import Project from "./components/Project";
 import ProjectList from "./components/ProjectList";
 import Signup from "./components/Signup";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 import {
   makeStyles, xToolbar, Typography, Grid, List,
   ListItem, ListItemIcon, ListItemText, Link as LinkUI, Container, useTheme, IconButton
@@ -125,6 +127,8 @@ function App() {
       <Router>
         <CssBaseline /> {/*removes default padding */}
         <NavBar />
+        {/* <Header/> */}
+        {/* put logout button here on the far right */}
         <Switch>
           <Route path="/contact" component={Contact} />
           <Route path="/signup" component={Signup} />
@@ -138,6 +142,7 @@ function App() {
           <PrivateRoute path="/" component={Dashboard} />
           <Route path="/" render={() => <div><h1>404</h1></div>} />
         </Switch>
+        <Footer/>
         {/* bottom nav */}
         {/* CssBaseline? */}
         {/* <footer className={classes.footer}>
