@@ -8,9 +8,12 @@ function CommentModal(props) {
     const [comment, setComment] = useState("");
     // const [commenter, setCommenter] = useState("")
     const { currentUser } = useContext(AuthContext);
+    const db = base.firestore();
 
     const addComment = (event) => {
-        base.firestore().collection("comments").add({
+        try{
+            event.preventDefault();
+            db.collection("comments").add({
             comment: comment,
             ticket: props.ticketId, 
             commenterId: currentUser.uid,
@@ -22,6 +25,13 @@ function CommentModal(props) {
             props.history.push(`/tickets/${props.projectId}/${props.ticketId}`)
         }
         )
+    } 
+    catch(error){
+        console.log(error)
+        alert("Something went wrong. Please try again.")
+        props.history.push(`/tickets/${props.projectId}/${props.ticketId}`)
+    }
+        // console.log(comment)
     }
 
     return props.status ? (
