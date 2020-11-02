@@ -3,7 +3,7 @@ import base from './firebase'
 import { AuthContext } from './Auth'
 
 
-function ticketCommentModal(props) {
+function TicketCommentModal(props) {
     const [comment, setComment] = useState("");
 
     /**
@@ -19,9 +19,9 @@ function ticketCommentModal(props) {
     }
     return (
         <div>
-
+            Ticket
         </div>
     )
 }
 
-export default ticketCommentModal
+export default TicketCommentModal
