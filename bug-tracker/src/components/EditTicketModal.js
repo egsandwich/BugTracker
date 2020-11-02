@@ -2,6 +2,14 @@ import React, {useState, useEffect, useContext} from 'react'
 import base from './firebase'
 import firebase from 'firebase'
 import {AuthContext} from './Auth'
+import FormControl from '@material-ui/core/FormControl';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Typography from '@material-ui/core/Typography';
+import {Grid, Box, Select, MenuItem} from '@material-ui/core/';
 
 function EditTicketModal(props) {
     const db = base.firestore();
@@ -64,7 +72,7 @@ function EditTicketModal(props) {
                     Edit
             </button>
         </div>
-    ) : <div> blank </div>
+    ) : <div></div>
 }
 
 export default EditTicketModal
