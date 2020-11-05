@@ -1,49 +1,56 @@
 import React, { useState, useContext } from 'react'
 import base from './firebase'
 import { AuthContext } from './Auth'
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter} from 'react-router-dom'
+import {Dialog, FormControl, Input, InputLabel, Button, Paper} from '@material-ui/core/';
+
 import firebase from 'firebase'
 
 function CommentModal(props) {
-    const [comment, setComment] = useState("");
-    // const [commenter, setCommenter] = useState("")
+    const [comment, setComment] = useState(" ");
     const { currentUser } = useContext(AuthContext);
     const db = base.firestore();
+    const [open, setOpen] = useState(props.status)
 
     const addComment = (event) => {
-        try{
-            event.preventDefault();
+            try{
+            document.getElementById("submitButton").disabled = true;
             db.collection("comments").add({
             comment: comment,
-            ticket: props.ticketId, 
+            ticket: props.ticketId,
             commenterId: currentUser.uid,
             commenterName: currentUser.displayName,
-            dateCreated: firebase.firestore.FieldValue.serverTimestamp()
-
+            dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
         }).then(() => {
-            setComment("");
+            setComment(" ");
             props.history.push(`/tickets/${props.projectId}/${props.ticketId}`)
         }
         )
-    } 
+    }
     catch(error){
-        console.log(error)
+        setComment(" ");
         alert("Something went wrong. Please try again.")
         props.history.push(`/tickets/${props.projectId}/${props.ticketId}`)
     }
-        // console.log(comment)
     }
 
-    return props.status ? (
+    const closeDialog = () => {
+        setOpen(!open)
+    }
+
+    return  (
         <div>
             <form>
-                <label>Comment</label>
-                <input value={comment} onChange={(event) => setComment(event.target.value)} />
-                <button onClick={addComment}>Add comment</button>
+                <FormControl>
+                    <InputLabel>Comment</InputLabel>
+                    <Input id="onInput" value={comment} onChange={(event) => {
+                        setComment(event.target.value);}
+                        } />
+                    <Button id="submitButton" variant="contained" size="small" type="submit" disabled={comment.length == 0} onClick={addComment}>Add comment</Button>
+                </FormControl>
             </form>
-        </div>
-    ) : <div>
-    </div>
+        </div> 
+    )
 }
 
 export default withRouter(CommentModal)
