@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import base from './firebase';
 import firebase from 'firebase';
 import { withRouter, useParams, Link, Redirect } from "react-router-dom";
-import { Grid, Box, Typography, Paper, Card, Button, Link as LinkUI, CardContent, CardActionArea, CardActions } from '@material-ui/core'
+import { Grid, Box, Typography, Paper, Card, Button, IconButton, Link as LinkUI, CardContent, CardActionArea, CardActions } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 // import AddCircleOutlineTwoToneIcon from '@material-ui/icons/AddCircleOutlineTwoTone';
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
 import Ticket from "./Ticket";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
 function Project(props) {
@@ -54,16 +55,28 @@ function Project(props) {
   }
   return (
     <div>
-      <Box m={3}>
-      <Grid container>
-        <Grid item xs={12}>
+      <Box m={2}>
+      <Grid container spacing={1} justify="space-around" alignItems="center">
+      
+      <Grid item xs={2} sm={1}>
+      <IconButton component={Link} to={'/myProjects'}>
+              <ArrowBackIcon fontSize="small"/>
+          </IconButton>
+       </Grid>
+
+        <Grid item xs={10} sm={3} md={3}>
         <Typography variant="h6">{nameOfProj}</Typography>
         </Grid>
+        
+        <Grid item xs={12} sm={4} md={3}>
         <Typography variant="subtitle1">Date created: {new Date(dateCreated).toLocaleDateString('no-NO')}</Typography>
-        <Grid item xs={12}>
-        <Button variant="contained" onClick={clickHandler}>Add Ticket</Button>
+        </Grid>
+
+        <Grid item xs={12} sm={2} md={3}>
+        <Button variant="contained" size="small" onClick={clickHandler}>Add Ticket</Button>
         </Grid>
       </Grid>
+      <Grid container spacing={1} justify="center">
       {tickets.map((ticket) => (
         <Grid item key={ticket.id}>
           <div>
@@ -71,6 +84,7 @@ function Project(props) {
            </div>
         </Grid>
       ))}
+      </Grid>
       </Box>
     </div >
   );
