@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
-import { Link as LinkUI, Typography, Box, Grid, Card, CardContent, CardActionArea, CardActions, Button, Paper} from '@material-ui/core/';
+import {Typography, Box, Grid, Card, CardContent, CardActionArea, CardActions, Button, Paper,
+    Collapse, IconButton, ListItemText} from '@material-ui/core/';
 import { grey, } from '@material-ui/core/colors';
-import { Link, withRouter, useParams } from "react-router-dom";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import {withRouter, useParams, Link } from "react-router-dom";
 import base from './firebase'
 import firebase from 'firebase'
 import CommentModal from './CommentModal'
 import EditTicketModal from './EditTicketModal';
 const useStyles = makeStyles((theme) => ({
-    root: {
-        backgroundColor: theme.palette.primary.main,
-        padding: theme.spacing(2),
-        margin: theme.spacing(2),
-        height: '4em',
-        // color: theme.palette.primary.main
-    },
-    title: {
-        fontSize: 20,
-        color: 'white'
-    },
+  ticketCard : {
+      maxWidth: "350px",
+  },
+  commentCard: {
+      maxWidth: "350px",
+  }
 }));
 
 function Ticket(props) {
     const db = base.firestore();
     const [ticketTitle, setTicketTitle] = useState("");
-    // const [ticketId, setTicketId] = useState("");
     const [ticketCreator, setTicketCreator] = useState("");
     const [ticketDescription, setTicketDescription] = useState("");
     const [ticketPriority, setTicketPriority] = useState("");
@@ -62,7 +59,7 @@ function Ticket(props) {
             })))
         })
             
-    }, [db.collection('comments')])
+    }, [db.collection('comments').where("ticket", "==", params.ticketId)])
 
     useEffect(() => {
       console.log(comments)
@@ -79,14 +76,20 @@ function Ticket(props) {
     const classes = useStyles();
 
     return (
-            <Box padding={4}>
-                <Grid container spacing={3}>
-                    <Grid item xs={12}>
+            <Box padding={2}>
+                <Grid container spacing={1} alignItems="center">
+                    <Grid item xs={2} sm={1}>
+                    <IconButton component={Link} to={`/detail/${params.projectId}/${params.ticketId}`}>
+                        <ArrowBackIcon/>
+                    </IconButton>
+                    </Grid>
+                    <Grid item xs={9} sm={9} lg={12} xl={12}>
                     <Typography variant="h4">Details</Typography>
                     </Grid>
-                    <Grid item xs={2} xl={12}></Grid>
-                    <Grid item xs={12} m={10} l={6} xl={6} >
-                    <Card>
+                </Grid>
+                    <Grid container item alignItems="center" justify="space-evenly">
+                    <Grid item xs={12} sm={12} md={6}>
+                    <Card className={classes.ticketCard}>
                         <CardContent>
                         <Typography variant="overline">Title:</Typography>
                         <Typography variant="h6"> {ticketTitle} </Typography>
@@ -100,36 +103,45 @@ function Ticket(props) {
                         <Typography>{ticketStatus} </Typography>
                         <Typography variant="overline"> Type: </Typography>
                         <Typography>{ticketType} </Typography>
+                        </CardContent>
                         <CardActionArea>
                             <CardActions>
-                                <Button size="small" color="primary" hidden={editActivate} onClick={editTicketHandler}>
-                                    {editActivate ? 'Close' : 'Edit'}
-                                </Button>
-                                <Button onClick={addCommentHandler} size="small" color="primary" hidden={active}>
-                                    {active ? 'Close' : 'Add comment'}
-                                </Button>
+                                <IconButton onClick={addCommentHandler}>
+                                <ListItemText primary="Add comment"> 
+                                <ExpandMoreIcon/>
+                                </ListItemText>
+                                </IconButton>
+                                <IconButton onClick={editTicketHandler}>
+                                <ExpandMoreIcon/>
+                                </IconButton>
                             </CardActions>
                         </CardActionArea>
-                        </CardContent>
+                        <Collapse in={active} timeout="auto" unmountOnExit>
+                            <CardContent>
+                            <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} />
+                            {/* Put add comment here? */}
+                            </CardContent>
+                        </Collapse>
+                        <Collapse in={editActivate} timeout="auto" unmountOnExit>
+                            <CardContent>
+                            {/* <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} /> */}
+                            {/* Edit */}
+                            <EditTicketModal status={editActivate} ticketId={params.ticketId}/>
+                            {/* Put add comment here? */}
+                            </CardContent>
+                        </Collapse>
                     </Card>
                     </Grid>
-                    <Grid item xs={2} xl={12}></Grid>
-                    
-                    <Grid item xs={8} m={8} l={6} xl={6}> 
+
+                    <Grid item xs={12} sm={12} md={6}> 
                         <Typography variant="subtitle1">Comments</Typography>
-                    <Card>
+                    <Card className={classes.ticketCard}>
                         {comments.map(comment => (
                             <Comment key={comment.commentId} comment={comment}>
                                 <p>{comment.comment} </p>
                                 </Comment>
                         ))}
                     </Card>
-                    </Grid>
-                    <Grid container item>
-                    
-                    <CommentModal status={active} ticketId={params.ticketId} projectId={params.projectId} />
-                    
-                    <EditTicketModal status={editActivate} ticketId={params.ticketId}/>
                     </Grid>
                 </Grid>
             </Box>
@@ -141,8 +153,15 @@ function Comment(props){
     const [dateConvert, setDateConvert] = useState();
 
     useEffect(() => {
-        setDateConvert(dateCreated.seconds * 1000)
-    }, [dateCreated!= null])
+        if(dateCreated == null){
+            var date = new Date();
+            setDateConvert(date.toLocaleDateString('no-NO')+ ", " + date.toLocaleTimeString('no-NO'))
+            console.log(dateConvert)
+        } else {
+            setDateConvert(dateCreated.toDate().toLocaleDateString('no-NO') + ", " + dateCreated.toDate().toLocaleTimeString('no-NO'))
+            console.log(dateConvert + " else")
+        }
+    }, [dateCreated != null])
     
     return (
         <Paper variant="outlined" square>
@@ -154,7 +173,7 @@ function Comment(props){
             {comment}
             </Typography>
             <Typography variant="caption">
-            {new Date(dateConvert).toLocaleDateString('no-NO')}
+            {dateConvert}
             </Typography>
         </CardContent>
         </Paper>
