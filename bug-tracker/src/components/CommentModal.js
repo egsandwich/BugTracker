@@ -3,7 +3,6 @@ import base from './firebase'
 import { AuthContext } from './Auth'
 import { withRouter} from 'react-router-dom'
 import {Dialog, FormControl, Input, InputLabel, Button, Paper} from '@material-ui/core/';
-
 import firebase from 'firebase'
 
 function CommentModal(props) {
@@ -13,8 +12,8 @@ function CommentModal(props) {
     const [open, setOpen] = useState(props.status)
 
     const addComment = (event) => {
-            try{
-            document.getElementById("submitButton").disabled = true;
+        event.preventDefault();
+        try{
             db.collection("comments").add({
             comment: comment,
             ticket: props.ticketId,
@@ -40,13 +39,13 @@ function CommentModal(props) {
 
     return  (
         <div>
-            <form>
+            <form onSubmit={addComment}>
                 <FormControl>
                     <InputLabel>Comment</InputLabel>
                     <Input id="onInput" value={comment} onChange={(event) => {
                         setComment(event.target.value);}
                         } />
-                    <Button id="submitButton" variant="contained" size="small" type="submit" disabled={comment.length == 0} onClick={addComment}>Add comment</Button>
+                    <Button variant="contained" size="small" type="submit" disabled={comment.length == 0}>Add comment</Button>
                 </FormControl>
             </form>
         </div> 
