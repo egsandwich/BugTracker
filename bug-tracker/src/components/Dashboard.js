@@ -14,7 +14,6 @@ import ChartType from "./ChartType";
 import { AuthContext } from "./Auth";
 
 function Dashboard(props) {
-    //backend
 
     const { currentUser } = useContext(AuthContext)
     const db = base.firestore();
@@ -54,12 +53,6 @@ function Dashboard(props) {
         })
     }, [projects.length > 0])
 
-     const logout = () => {
-        base.auth().signOut().then(
-            props.history.push('/login')
-            )
-        }
-
         return (
             < Box >
             {currentUser.displayName}
@@ -67,10 +60,6 @@ function Dashboard(props) {
             <ChartPriority tickets={tickets }/>
             <ChartStatus tickets={tickets}/>
             <ChartType tickets={tickets}/>
-
-            <div>
-                <button onClick={logout}>Logout</button>
-            </div>
         </Box >
     )
 }
