@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import base from "./firebase";
 import { AuthContext } from './Auth'
 import firebase from 'firebase'
-import {useParams, withRouter} from "react-router-dom";
+import {useParams, withRouter, Link} from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
@@ -11,7 +11,8 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Typography from '@material-ui/core/Typography';
-import {Grid, Box, Select, MenuItem} from '@material-ui/core/';
+import {Grid, Box, Select, MenuItem, IconButton} from '@material-ui/core/';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 //props = project component
 function CreateTicket(props) {
@@ -62,18 +63,22 @@ function CreateTicket(props) {
     return (
         <div>
             <Box m={2} flexGrow={1}>
-            <Grid container>
-            <Grid item xs={12} >
+            <Grid container spacing={2}>
+            <Grid item xs={1} md={1}>
+                    <IconButton component={Link} to={`/detail/${param.projectId}`}>
+                            <ArrowBackIcon fontSize="small"/>
+                        </IconButton>
+                    </Grid> 
+            <Grid item xs={11} >
                     <Typography variant="h4">Add Ticket </Typography>
-            </Grid>       
-                <form>
-                    <Grid item container spacing={2}>
-                    <Grid item xs={12}>
+            </Grid>     
+            <form>
+                <Grid item xs={12}>
                     <FormControl>
                         <InputLabel>Title</InputLabel>
                         <Input type="text" value={ticketTitle} onChange={(event) => setTicketTitle(event.target.value)} />
                         </FormControl>
-                    </Grid>
+                </Grid>
 
                     <Grid item xs={12}>
                         <FormControl>
@@ -82,7 +87,7 @@ function CreateTicket(props) {
                         </FormControl>
                     </Grid>
                     
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                     <InputLabel>Type</InputLabel>
                     <FormControl>
                     <Select id="ticketType" value={ticketType} onChange={(event) => setTicketType(event.target.value)}>
@@ -92,7 +97,7 @@ function CreateTicket(props) {
                     </FormControl>
                     </Grid>
 
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                     <InputLabel>Status</InputLabel>
                     <FormControl>
                     <Select value={ticketStatus} onChange={(event) => setTicketStatus(event.target.value)}>
@@ -103,7 +108,7 @@ function CreateTicket(props) {
                     </FormControl>
                     </Grid>
 
-                    <Grid item xs={3}>
+                    <Grid item xs={2}>
                     <InputLabel>Priority</InputLabel>
                     <FormControl>
                     <Select value={ticketPriority} onChange={(event) => setTicketPriority(event.target.value)}>
@@ -113,7 +118,6 @@ function CreateTicket(props) {
                     </Select>
                     </FormControl>
                     </Grid>  
-                </Grid>
                 </form>
                 <Grid item xs={12} >
                 <Button variant="contained" type="submit" disabled={ticketTitle.length === 0 || ticketDescription.length === 0} onClick={createTicket}>

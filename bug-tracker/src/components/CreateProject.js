@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import base from "./firebase";
 import firebase, { firestore } from 'firebase';
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,7 +11,9 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
 import { AuthContext } from "./Auth";
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -117,11 +119,17 @@ function CreateProject(props) {
     return (
         <div>
             <Box m={2} flexGrow={1}>
-                <Grid container spacing={3}>
-                <Grid item xs={12} md={6}>
+                <Grid container spacing={2} >
+                <Grid item xs={2} md={1}>
+                    <IconButton component={Link} to={'/'}>
+                            <ArrowBackIcon fontSize="small"/>
+                        </IconButton>
+                    </Grid>
+                <Grid item xs={10} md={11}>
                     <Typography variant="h4">Add project</Typography>
+                    </Grid>
+                    <Grid item xs={12} xl={4}>
                     <form>
-                    <Grid item xs={12} md={6}>
                         <FormControl>
                             <InputLabel>Project name</InputLabel>
                             <Input required
@@ -129,11 +137,11 @@ function CreateProject(props) {
                                 onChange={(event) => setProjectName(event.target.value)}
                             />
                         </FormControl>
-                    </Grid>
                     </form>
-                </Grid>
+                    </Grid>
+                
 
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} xl={4}>
                     <Typography variant="h5">Add members</Typography>
                         <table>
                             <thead>
@@ -176,7 +184,9 @@ function CreateProject(props) {
                         <Button variant="contained" size="small" onClick={addMemberHandler}>Add members</Button>
                     </Grid>
               
-                    <br/>
+                    <Grid item xs={12} md={6} xl={4}>
+                        Added members here
+                    </Grid>
                     
                         <Grid item xs={12}>
                             <Button onClick={createProject} variant="contained" type="submit" disabled={projectName.length < 1}>
