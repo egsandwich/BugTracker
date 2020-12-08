@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import base from '../firebase'
-import { useHistory } from 'react-router-dom'
-import { Grid, Typography, Paper, Card, Button, Input, Box,FormControl } from '@material-ui/core'
+import { useHistory, Link} from 'react-router-dom'
+import { Grid, Typography, Button, Input, Box} from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab';
 import {useAuth} from '../contexts/AuthContext'
 
@@ -52,10 +52,10 @@ function Signup(props) {
         return firstName.length === 0 || lastName.length === 0 || email.length === 0 || password.length === 0;
     }
 
-    //change to card
     return (
-            <Box m={2}>
+            <Box m={3}>
             <Grid container spacing={3} justify="center">
+                <Box maxWidth="400px">
                 <Grid item xs={12}>
                     <Typography variant="h4">Sign up</Typography>
                 </Grid>
@@ -86,17 +86,18 @@ function Signup(props) {
                 <Grid item xs={12}>
                     <Input placeholder="Confirm Password" required="true" type="password" inputRef={confPassword}  />
                 </Grid>
-                <p><Button variant="contained" type="submit" disabled={loading}>Sign up</Button></p>
+                <p><Button variant="contained" color="primary" type="submit" disabled={loading}>Sign up</Button></p>
             </form>
                 <Grid item xs={12}>
-                Already have an account? Log in.
+                <Typography variant="subtitle1">  
+                Already have an account? <Link to="/login">Log in.</Link>
+                </Typography>
                 </Grid>
+            </Box>
             </Grid>
-          
             </Box>
             
     )
 }
 
 export default Signup;
-// export default withRouter(Signup)
