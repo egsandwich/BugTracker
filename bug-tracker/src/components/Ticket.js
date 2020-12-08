@@ -6,7 +6,7 @@ import { grey, } from '@material-ui/core/colors';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import {withRouter, useParams, Link } from "react-router-dom";
-import base from './firebase'
+import base from '../firebase'
 import firebase from 'firebase'
 import CommentModal from './CommentModal'
 import EditTicketModal from './EditTicketModal';

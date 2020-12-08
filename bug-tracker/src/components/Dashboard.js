@@ -80,11 +80,7 @@ function Dashboard(props) {
             {/* {currentUser.displayName} */}
             {/* <Header username={currentUser.displayName} /> */}
             {/* {currentUser.email} */}
-            <button onClick={()=> {
-                console.log("on logout")
-                base.auth().signOut()
-                history.push('/signup')
-            }}>Logout</button>
+        
             <ChartPriority tickets={tickets }/>
             <ChartStatus tickets={tickets}/>
             <ChartType tickets={tickets}/>

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useContext } from 'react'
-import base from './firebase'
+import base from '../firebase'
 import { Link, withRouter } from 'react-router-dom'
 import { Typography, Box, Grid, Card, CardContent, CardActionArea, CardActions, Button, Paper, MenuItem, ListItemText} from '@material-ui/core/';
 import AssignmentIcon from '@material-ui/icons/Assignment';
-import { AuthContext } from './Auth'
+import { useAuth } from '../contexts/AuthContext'
 
-function ProjectList(props) {
+function ProjectList() {
     const [projectsOwn, setProjectsOwn] = useState([""]);
     const [projectsBelong, setProjectsBelong] = useState([""]);
-    const { currentUser } = useContext(AuthContext)
     const db = base.firestore()
+    const {currentUser} = useAuth()
 
     useEffect(() => {
         db.collection("projects").where("projectOwner", "==", currentUser.uid).onSnapshot(snapshot => {
@@ -81,4 +81,4 @@ function ProjectList(props) {
     )
 }
 
-export default withRouter(ProjectList);
+export default ProjectList;

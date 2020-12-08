@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import base from './firebase';
+import base from '../firebase';
 import firebase from 'firebase';
 import { withRouter, useParams, Link, Redirect } from "react-router-dom";
 import { Grid, Box, Typography, Paper, Card, Button, IconButton, Link as LinkUI, CardContent, CardActionArea, CardActions } from '@material-ui/core'

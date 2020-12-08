@@ -1,14 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { AuthContext } from './Auth'
-import base from './firebase'
+import {useAuth } from '../contexts/AuthContext'
+import base from '../firebase'
 import EditModal from './EditModal'
 
 function Profile() {
     const [name, setName] = useState(null)
     const [email, setEmail] = useState(null)
     const [showModal, setShowModal] = useState(false)
-    const { currentUser } = useContext(AuthContext)
-
+    const { currentUser } = useAuth()
     // console.log(currentUser.email)
     useEffect(() => {
         setName(currentUser.displayName)

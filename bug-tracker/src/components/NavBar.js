@@ -12,9 +12,9 @@ import ContactSupportOutlinedIcon from '@material-ui/icons/ContactSupportOutline
 import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import ListAltOutlinedIcon from '@material-ui/icons/ListAltOutlined'
 import ExitToAppOutlinedIcon from '@material-ui/icons/ExitToAppOutlined'
-import { Link, withRouter} from 'react-router-dom'
-import base from './firebase'
-
+import { Link, withRouter, useHistory} from 'react-router-dom'
+import base from '../firebase'
+import { useAuth } from "../contexts/AuthContext";
 //CSS styles
 const useStyles = makeStyles(theme => ({
     appBar: {
@@ -56,7 +56,7 @@ const menuItems = [
     {
         listIcon: <SettingsOutlinedIcon />,
         listText: "Profile",
-        listPath: "/"
+        listPath: "/myProfile"
     },
     {
         listIcon: <ContactSupportOutlinedIcon />,
@@ -72,12 +72,15 @@ function NavBar(props) {
     const toggleMenu = (slider, open) => () => {
         setState({ ...state, [slider]: open });
     }
-
-    const handleLogout = () => {
-        base.auth().signOut().then(
-            props.history.push('/')
-        )
+    
+    const history = useHistory()
+    async function handleLogout() {
+        await logout()
+        history.push('/login')
+        
     }
+
+    const {currentUser, logout} = useAuth()
     const classes = useStyles();
     const sideList = slider => (
         < Box component="div" className={classes.menuSliderContainer} onClick={toggleMenu("left", false)}>
@@ -91,7 +94,7 @@ function NavBar(props) {
                     </ListItem>
                 ))}
             </List>
-            <MenuItem onClick={handleLogout}>
+            <MenuItem onClick={handleLogout} disabled={currentUser == null}>
                 <ListItemIcon className={classes.icon}>
                     <ExitToAppOutlinedIcon fontSize="small"/>
                 </ListItemIcon>
@@ -127,4 +130,4 @@ function NavBar(props) {
     )
 }
 
-export default withRouter(NavBar);
+export default NavBar;
