@@ -1,53 +1,60 @@
-import React, { useState, useCallback } from "react";
-import { withRouter } from 'react-router-dom'
+import React, { useRef, useState} from "react";
+import {useHistory } from 'react-router-dom'
 import { Grid, Typography, Button, Input, Box} from '@material-ui/core'
-import base from './firebase'
+import { Alert, AlertTitle } from '@material-ui/lab';
+import {useAuth} from '../contexts/AuthContext'
 
 function Login(props) {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const email = useRef()
+    const password = useRef()
+    const {login} = useAuth()
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState()
+    const history = useHistory()
 
 
-
-    const login = useCallback(
-        async event => {
-            event.preventDefault();
-            try {
-                await base
-                    .auth()
-                    .signInWithEmailAndPassword(email, password);
-                //update stuff on user end
-                props.history.push('/')
-            } catch (error) {
-                alert("Something went wrong. Please try again");
-                setPassword("");
-                props.history.push('/login')
-
-            }
+    async function handleLogin(e){
+        e.preventDefault()
+        try {
+            setError('')
+            setLoading(true)
+            await login(email.current.value, password.current.value)
+            history.push('/')
+        } catch {
+            setError('Failed to sign in')
         }
-    );
+        setLoading(false)
+    }
 
 
     return (
         <div>
             <Box m={2}>
-            <Grid container layout='row' spacing={3}>
-                <Grid container justify="space-between">
+            <Grid container justify="center" spacing={3}>
+                <Grid container item justify="space-between">
                 <Grid item xl={6} xs={6}>
                     <Typography variant="h4">Log In</Typography>
                 </Grid>
-                    <Button  variant="contained" href="/signup">Sign up</Button>
+                <Grid item> 
+                {error && 
+                <Alert severity="error">
+                    <AlertTitle>{error}</AlertTitle>
+                </Alert>
+                }
+                </Grid>
                 </Grid>
                 <Box m={1}>
-                    <form onSubmit={login}>
+                    <form onSubmit={handleLogin}>
                         <Grid item xs={12}>
-                        <Input placeholder="Email" value={email} onChange={(event) => setEmail(event.target.value)} />  
+                        <Input placeholder="Email" inputRef={email} />  
                         </Grid>
                         <Grid item>
-                        <p> <Input placeholder="Password" type="password" value={password} onChange={(event) => setPassword(event.target.value)} />  </p>
+                        <Input placeholder="Password" type="password" inputRef={password}/> 
                         </Grid>
-                        <p><Button variant="contained" color="primary" disabled={email.length === 0 || password.length === 0}type="submit">Login</Button>
-                        </p>
+                        <Button variant="contained" color="primary" disabled={email.length === 0 || password.length === 0 || loading}type="submit">Login</Button>
+                        <Grid item xs={12}>
+                            Need an account? Sign up.
+                        </Grid>
                     </form>
                 </Box>
             </Grid>
@@ -55,5 +62,4 @@ function Login(props) {
         </div >
     );
 }
-
-export default withRouter(Login);
+export default Login;

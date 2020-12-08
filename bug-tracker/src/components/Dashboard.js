@@ -2,61 +2,89 @@ import React, { useState, useEffect, useContext, useCallback } from "react";
 import Preview from "./Preview";
 import NavBar from "./NavBar";
 import Header from "./Header";
-import base from "./firebase";
-import firebase from 'firebase'
+import base from "../firebase";
+// import firebase from 'firebase'
 import { Grid, Typography, Paper, Card, Button, Link as LinkUI, Box } from '@material-ui/core'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import AddCircleOutlinedIcon from '@material-ui/icons/AddCircleOutlined';
-import { BrowserRouter as Router, Switch, Route, Link, withRouter } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Link, withRouter, useHistory } from 'react-router-dom';
 import ChartPriority from "./ChartPriority";
 import ChartStatus from "./ChartStatus";
 import ChartType from "./ChartType";
-import { AuthContext } from "./Auth";
+import { useAuth } from "../contexts/AuthContext";
 
 function Dashboard(props) {
 
-    const { currentUser } = useContext(AuthContext)
+    // const { currentUser } = useContext(AuthContext)
     const db = base.firestore();
     const [tickets, setTickets] = useState([]);
     const [projects, setProjects] = useState([])
+    const history = useHistory()
+    const {currentUser, logout} = useAuth()
 
 
-    useEffect(() => {
-        db.collection('users').doc(currentUser.uid).onSnapshot(snapshot => {
-            snapshot.ref.collection('myProjects').onSnapshot(snapshot => {
-                   setProjects(snapshot.docs.map(doc => ({
-                        projectId: doc.data().projectId,
-                        projectName: doc.data().projectName,
-                        projectOwner: doc.data().projectOwner,
-                    })))
-            })
-        })
-    }, [])
+    // useEffect(() => {
+    //     db.collection('users').doc(currentUser.uid).onSnapshot(snapshot => {
+    //         snapshot.ref.collection('myProjects').onSnapshot(snapshot => {
+    //                setProjects(snapshot.docs.map(doc => ({
+    //                     projectId: doc.data().projectId,
+    //                     projectName: doc.data().projectName,
+    //                     projectOwner: doc.data().projectOwner,
+    //                 })))
+    //         })
+    //     })
+    // }, [])
 
-    useEffect(() => {
-        projects.map(project => {
-            db.collection('tickets').where("projectId", "==", project.projectId)
-            .onSnapshot(snapshot => {
-                    setTickets(tickets => [... tickets, ... (snapshot.docs.map(doc => ({
-                        ticketId: doc.id,
-                        ticketDescription: doc.data().ticketDescription,
-                        ticketTitle: doc.data().ticketTitle,
-                        ticketCreator: doc.data().ticketCreator,
-                        dateCreated: doc.data().dateCreated,
-                        project: doc.data().projectId,
-                        ticketPriority: doc.data().ticketPriority,
-                        ticketType: doc.data().ticketType,
-                        ticketStatus: doc.data().ticketStatus,
-                    })))])
+    // useEffect(() => {
+    //     projects.map(project => {
+    //         db.collection("tickets").where("projectId", "==", project.projectId)
+    //         .onSnapshot(snapshot => {
+    //                 setTickets(tickets => [... tickets, ... (snapshot.docs.map(doc => ({
+    //                     ticketId: doc.id,
+    //                     ticketDescription: doc.data().ticketDescription,
+    //                     ticketTitle: doc.data().ticketTitle,
+    //                     ticketCreator: doc.data().ticketCreator,
+    //                     dateCreated: doc.data().dateCreated,
+    //                     project: doc.data().projectId,
+    //                     ticketPriority: doc.data().ticketPriority,
+    //                     ticketType: doc.data().ticketType,
+    //                     ticketStatus: doc.data().ticketStatus,
+    //                 })))])
                    
-                    })
-        })
-    }, [projects.length > 0])
+    //                 })
+    //     })
+    // }, [projects.length > 0])
 
+    // useEffect(
+    //     db.collection("projects").onSnapshot(snapshot => {
+    //         // setProjects(snapshot.docs.map(doc => ({
+    //         //     id: doc.id,
+    //         //     projectName: doc.data().projectName,
+    //         // })))
+    //         snapshot.docs.map(doc => {
+    //             console.log(doc.data())
+    //         })
+    //     })
+    // )
+
+        async function handleLogout(){
+            try {
+                await logout()
+                history.push("/login")
+            } catch {
+                alert("Error")
+            }
+        }
         return (
             < Box >
-            {currentUser.displayName}
+            {/* {currentUser.displayName} */}
             {/* <Header username={currentUser.displayName} /> */}
+            {/* {currentUser.email} */}
+            <button onClick={()=> {
+                console.log("on logout")
+                base.auth().signOut()
+                history.push('/signup')
+            }}>Logout</button>
             <ChartPriority tickets={tickets }/>
             <ChartStatus tickets={tickets}/>
             <ChartType tickets={tickets}/>
@@ -64,5 +92,5 @@ function Dashboard(props) {
     )
 }
 
-
-export default withRouter(Dashboard);
+export default Dashboard;
+// export default withRouter(Dashboard);

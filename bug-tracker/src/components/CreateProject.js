@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from "react";
-import base from "./firebase";
+import React, { useState, useRef, useEffect, useReducer } from "react";
+import base from "../firebase";
 import firebase, { firestore } from 'firebase';
-import { withRouter, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import FormControl from '@material-ui/core/FormControl';
@@ -10,31 +10,30 @@ import Checkbox from '@material-ui/core/Checkbox';
 import InputLabel from '@material-ui/core/InputLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import {List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core/';
 import Grid from '@material-ui/core/Grid';
 import IconButton from '@material-ui/core/IconButton';
-import { AuthContext } from "./Auth";
+import { useAuth } from "../contexts/AuthContext";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        '& > *': {
-            margin: theme.spacing(1),
-        },
-    },
-}));
-
-
-
+import { FormControlLabel, FormGroup, FormLabel } from "@material-ui/core";
 
 
 function CreateProject(props) {
-    const { currentUser } = useContext(AuthContext)
     const [projectName, setProjectName] = useState("");
     const [users, setUsers] = useState([]);
     const [projectMembers, setProjectMembers] = useState([]);
-    const [allCheckDefault, setAllCheckDefault] = useState(false);
-    
+    // const reducer = (state, action) => ({...state, ...action})
+    // const [listState, setListState] = useReducer(reducer, users);
+    const pointer = useRef()
+    const buttonPointer = useRef()
+    // const [allCheckDefault, setAllCheckDefault] = useState(false);
+    const [loading, setLoading] = useState(false)
+    const history =  useHistory()
+    // const [state, dispatch] = useReducer(reducer, {select: false })
     const db = base.firestore();
+    const {currentUser} = useAuth()
+    const [loadingOnAddMembers, setLoadingOnAddMembers] = useState(false)
+    
 
     useEffect(() => {
         db.collection('users').where(firebase.firestore.FieldPath.documentId(), "!=", currentUser.uid)
@@ -48,57 +47,59 @@ function CreateProject(props) {
             })))
         })
 
-    }, [])
+    }, [db])
 
-    useEffect(() => {
-    console.log(projectMembers)
-    }, [projectMembers])
 
-    const createProject = (event) => {
+    async function createProject(event){
         event.preventDefault();
-        db.collection('projects').add({
-            projectName: projectName,
-            projectOwner: currentUser.uid,
-            dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
-        }).then((docRef) => {
-            try{
-            db.collection('users').doc(currentUser.uid)
-            .collection('myProjects').doc(docRef.id).set({
-                projectId: docRef.id,
-                projectName, projectName,
-                owner: true,
+        try{
+            setLoading(true)
+            var newProject = db.collection('projects').doc();
+            await newProject.set({
+                projectName: projectName,
+                projectOwner: currentUser.uid,
+                dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             })
-            projectMembers.map(member => {
-                db.collection('users').doc(member.userId)
-                .collection('myProjects').doc(docRef.id).set(
-                    {
-                    projectId: docRef.id,
-                    projectName: projectName, 
-                    owner: false,
-                    userOwner: currentUser.uid,
-                }
-                )})
-                setProjectName("");
-                setProjectMembers([]);
-                setUsers(users.map(u => {
-                    if(u.select){
-                        u.select = !u.select;
+            try {
+                await db.collection('users').doc(currentUser.uid)
+                .collection('myProjects').doc(newProject.id).set({
+                    projectId: newProject.id,
+                    projectName, projectName,
+                    owner: true,
+                })
+                projectMembers.map(member => {
+                    db.collection('users').doc(member.userId)
+                    .collection('myProjects').doc(newProject.id).set(
+                        {
+                        projectId: newProject.id,
+                        projectName: projectName, 
+                        owner: false,
+                        userOwner: currentUser.uid,
                     }
-                    return u;
-                }))
-                setAllCheckDefault(false);
-                props.history.push('/myProjects')
+                    )})
+                history.push('/myProjects')
                 } 
-                catch (error) {
-                    db.collection('projects').doc(docRef.id)
-                    .delete().then(
-                        props.history.push('/addProject')
-                    )
-                    alert("Something went wrong. Please try again.")
+                    catch (error) {
+                        await db.collection('projects').doc(newProject.id)
+                        .delete()
+                        alert("Something went wrong on adding to user. Please try again.")
                 }
-         
-        })
-    };
+        } catch {
+                alert("Something went wrong. Please try again.")
+        }
+        //to default
+        setProjectName("");
+        setProjectMembers([]);
+        setUsers(users.map(u => {
+            if(u.select){
+                u.select = !u.select;
+            }
+            return u;
+        }))
+        setLoading(false)
+    }
+
+
     const addMemberHandler = (event) => {
         users.map(user => {
             if(user.select){
@@ -112,10 +113,17 @@ function CreateProject(props) {
         })
     }
 
-   
+  
+    function addToList(index){
+        const query = projectMembers.find(member => member.email === users[index].email);
+        if(query == null)
+        setProjectMembers (projectMembers => projectMembers.concat({email: users[index].email, userId: users[index].userId}))
+        else
+        //change this to error
+        alert("MEEPMORP")
 
+    }
 
-    const classes = useStyles();
     return (
         <div>
             <Box m={2} flexGrow={1}>
@@ -143,7 +151,49 @@ function CreateProject(props) {
 
                 <Grid item xs={12} md={6} xl={4}>
                     <Typography variant="h5">Add members</Typography>
-                        <table>
+                        
+                            {console.log("here")}
+                            {/* {console.log(projectMems.current[0].select)} */}
+                            <FormControl>
+                                <FormGroup>
+                                        {users.map((user, index) => (
+                                            <p><Button onClick={() => {
+                                                pointer.current = user.userId;
+                                                addToList(index);
+                                            }}>Add</Button> {user.email} </p>
+                                        ))}
+                                    </FormGroup>
+                                </FormControl>
+                    </Grid>
+              
+                    <Grid item xs={12} md={6} xl={4}>
+                        Added members here
+                        
+                        {projectMembers.map(member => (
+                            <p>
+                                {member.email}
+                            </p>
+                        ))}
+                    </Grid>
+                    
+                        <Grid item xs={12}>
+                            <Button onClick={createProject} variant="contained" type="submit" disabled={projectName.length < 1 || loading}>
+                                Create Project
+                            </Button>
+                        </Grid>
+
+                </Grid>
+           </Box>
+        </div >
+    );
+}
+
+
+
+export default CreateProject;
+
+
+{/* <table>
                             <thead>
                                 <tr>
                                 <th scope="col">
@@ -180,26 +230,26 @@ function CreateProject(props) {
                                 </tr>
                     ))}
                             </tbody>
-                        </table>
+                        </table> */}
+                        {/* <FormControl component="fieldset">
+                            <FormGroup>
+                                {users.map(user => (
+                                    <FormControlLabel label={user.email}
+                                    control={<Checkbox checked={user.select} onChange={(e) => {
+                                        setUsers(u => {
+                                            let cheked = e.target.checked; 
+                                            if(user.userId === u.userId) {
+                                            u.select = cheked;
+                                            }
+                                            return u;
+                                        })
+                                    }}/>}
+                                />
+                                ))}
+                                
+
+                            </FormGroup>
                         <Button variant="contained" size="small" onClick={addMemberHandler}>Add members</Button>
-                    </Grid>
-              
-                    <Grid item xs={12} md={6} xl={4}>
-                        Added members here
-                    </Grid>
-                    
-                        <Grid item xs={12}>
-                            <Button onClick={createProject} variant="contained" type="submit" disabled={projectName.length < 1}>
-                                Create Project
-                            </Button>
-                        </Grid>
-
-                </Grid>
-           </Box>
-        </div >
-    );
-}
+                        </FormControl> */}
 
 
-
-export default withRouter(CreateProject);
