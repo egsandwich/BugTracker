@@ -1,193 +1,149 @@
-import React, { useState, useRef, useEffect, useReducer } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import base from "../firebase";
 import firebase, { firestore } from 'firebase';
 import { useHistory, Link } from "react-router-dom";
-import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import FormControl from '@material-ui/core/FormControl';
-import Input from '@material-ui/core/Input';
-import Checkbox from '@material-ui/core/Checkbox';
-import InputLabel from '@material-ui/core/InputLabel';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import {List, ListItem, ListItemText, ListItemIcon } from '@material-ui/core/';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
+import { Box, FormControl, Input, InputLabel, Button, Typography, IconButton, Grid, FormGroup, } from '@material-ui/core/';
 import { useAuth } from "../contexts/AuthContext";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { FormControlLabel, FormGroup, FormLabel } from "@material-ui/core";
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 
 
-function CreateProject(props) {
-    const [projectName, setProjectName] = useState("");
+function CreateProject() {
+    const projectName = useRef()
     const [users, setUsers] = useState([]);
     const [projectMembers, setProjectMembers] = useState([]);
-    // const reducer = (state, action) => ({...state, ...action})
-    // const [listState, setListState] = useReducer(reducer, users);
-    const pointer = useRef()
-    const buttonPointer = useRef()
-    // const [allCheckDefault, setAllCheckDefault] = useState(false);
     const [loading, setLoading] = useState(false)
-    const history =  useHistory()
-    // const [state, dispatch] = useReducer(reducer, {select: false })
+    const history = useHistory()
     const db = base.firestore();
-    const {currentUser} = useAuth()
-    const [loadingOnAddMembers, setLoadingOnAddMembers] = useState(false)
-    
+    const { currentUser } = useAuth()
+
 
     useEffect(() => {
         db.collection('users').where(firebase.firestore.FieldPath.documentId(), "!=", currentUser.uid)
-        .onSnapshot(snapshot=> {
-            setUsers(snapshot.docs.map(doc => ({
-                userId: doc.id,
-                email: doc.data().email,
-                firstName: doc.data().firstName,
-                lastName: doc.data().lastName,
-                select: false,
-            })))
-        })
+            .onSnapshot(snapshot => {
+                setUsers(snapshot.docs.map(doc => ({
+                    userId: doc.id,
+                    email: doc.data().email,
+                    firstName: doc.data().firstName,
+                    lastName: doc.data().lastName,
+                    select: false,
+                })))
+            })
 
     }, [db])
 
 
-    async function createProject(event){
+    async function createProject(event) {
         event.preventDefault();
-        try{
+        try {
             setLoading(true)
             var newProject = db.collection('projects').doc();
             await newProject.set({
-                projectName: projectName,
+                projectName: projectName.current.value,
                 projectOwner: currentUser.uid,
                 dateCreated: firebase.firestore.FieldValue.serverTimestamp(),
             })
             try {
                 await db.collection('users').doc(currentUser.uid)
-                .collection('myProjects').doc(newProject.id).set({
-                    projectId: newProject.id,
-                    projectName, projectName,
-                    owner: true,
-                })
+                    .collection('myProjects').doc(newProject.id).set({
+                        projectId: newProject.id,
+                        projectName, projectName,
+                        owner: true,
+                    })
                 projectMembers.map(member => {
                     db.collection('users').doc(member.userId)
-                    .collection('myProjects').doc(newProject.id).set(
-                        {
-                        projectId: newProject.id,
-                        projectName: projectName, 
-                        owner: false,
-                        userOwner: currentUser.uid,
-                    }
-                    )})
+                        .collection('myProjects').doc(newProject.id).set(
+                            {
+                                projectId: newProject.id,
+                                projectName: projectName,
+                                owner: false,
+                                userOwner: currentUser.uid,
+                            }
+                        )
+                })
                 history.push('/myProjects')
-                } 
-                    catch (error) {
-                        await db.collection('projects').doc(newProject.id)
-                        .delete()
-                        alert("Something went wrong on adding to user. Please try again.")
-                }
-        } catch {
-                alert("Something went wrong. Please try again.")
-        }
-        //to default
-        setProjectName("");
-        setProjectMembers([]);
-        setUsers(users.map(u => {
-            if(u.select){
-                u.select = !u.select;
             }
-            return u;
-        }))
+            catch (error) {
+                await db.collection('projects').doc(newProject.id)
+                    .delete()
+                alert("Something went wrong on adding to user. Please try again.")
+            }
+        } catch {
+            alert("Something went wrong. Please try again.")
+        }
+        setProjectMembers([]);
         setLoading(false)
     }
 
 
-    const addMemberHandler = (event) => {
-        users.map(user => {
-            if(user.select){
-                setProjectMembers(projectMembers => [... projectMembers, {
-                    userId: user.userId,
-                    firstName: user.firstName,
-                    lastName: user.lastName,
-                }])
-                
-            }
-        })
+
+    function addToList(index) {
+        const query = projectMembers.find(member => member.email === users[index].email);
+        if (query == null)
+            setProjectMembers(projectMembers => projectMembers.concat({ email: users[index].email, userId: users[index].userId }))
+        else
+            //change this to error
+            alert("MEEPMORP")
+
     }
 
-  
-    function addToList(index){
-        const query = projectMembers.find(member => member.email === users[index].email);
-        if(query == null)
-        setProjectMembers (projectMembers => projectMembers.concat({email: users[index].email, userId: users[index].userId}))
-        else
-        //change this to error
-        alert("MEEPMORP")
-
+    function removeFromList(member) {
+        setProjectMembers(projectMembers.filter(pM => pM !== member))
     }
 
     return (
-        <div>
-            <Box m={2} flexGrow={1}>
-                <Grid container spacing={2} >
-                <Grid item xs={2} md={1}>
+        // try other values
+        <Box m={4}>
+            <Grid container spacing={2} justify="center">
+                <Grid item xs={2} >
                     <IconButton component={Link} to={'/'}>
-                            <ArrowBackIcon fontSize="small"/>
-                        </IconButton>
-                    </Grid>
-                <Grid item xs={10} md={11}>
+                        <ArrowBackIcon fontSize="small" />
+                    </IconButton>
+                </Grid>
+                <Grid item xs={10}>
                     <Typography variant="h4">Add project</Typography>
-                    </Grid>
-                    <Grid item xs={12} xl={4}>
+                </Grid>
+                <Grid item xs={12} xl={4}>
                     <form>
                         <FormControl>
                             <InputLabel>Project name</InputLabel>
-                            <Input required
-                                value={projectName}
-                                onChange={(event) => setProjectName(event.target.value)}
-                            />
+                            <Input required ref={projectName} />
                         </FormControl>
                     </form>
-                    </Grid>
-                
+                </Grid>
+
 
                 <Grid item xs={12} md={6} xl={4}>
-                    <Typography variant="h5">Add members</Typography>
-                        
-                            {console.log("here")}
-                            {/* {console.log(projectMems.current[0].select)} */}
-                            <FormControl>
-                                <FormGroup>
-                                        {users.map((user, index) => (
-                                            <p><Button onClick={() => {
-                                                pointer.current = user.userId;
-                                                addToList(index);
-                                            }}>Add</Button> {user.email} </p>
-                                        ))}
-                                    </FormGroup>
-                                </FormControl>
-                    </Grid>
-              
-                    <Grid item xs={12} md={6} xl={4}>
-                        Added members here
-                        
-                        {projectMembers.map(member => (
-                            <p>
-                                {member.email}
-                            </p>
-                        ))}
-                    </Grid>
-                    
-                        <Grid item xs={12}>
-                            <Button onClick={createProject} variant="contained" type="submit" disabled={projectName.length < 1 || loading}>
-                                Create Project
-                            </Button>
-                        </Grid>
-
+                    <Typography variant="h6">Add members</Typography>
+                    <FormControl>
+                        <FormGroup>
+                            {users.map((user, index) => (
+                                <p><IconButton onClick={() => {
+                                    addToList(index)
+                                }}><AddCircleOutlineOutlinedIcon /> </IconButton> {user.email} </p>
+                            ))}
+                        </FormGroup>
+                    </FormControl>
                 </Grid>
-           </Box>
-        </div >
+
+                <Grid item xs={12} md={6} xl={4}>
+                    <Typography variant="h6">Added members here</Typography>
+                    {projectMembers.map((member) => (
+                        <p><IconButton onClick={() => {
+                            removeFromList(member)
+                        }}><RemoveCircleOutlineIcon /></IconButton> {member.email} </p>
+                    ))}
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Button onClick={createProject} color="primary" variant="contained" type="submit" disabled={projectName.length < 1 || loading}>
+                        Create Project
+                            </Button>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
-
-
 
 export default CreateProject;
