@@ -17,6 +17,7 @@ import PrivateRoute from './components/PrivateRoute'
 import Profile from './components/Profile'
 import Ticket from "./components/Ticket";
 import { CssBaseline } from '@material-ui/core'
+import EditModal from "./components/EditModal";
 // ---------------------------------------------------------
 
 
@@ -41,6 +42,7 @@ function App() {
           <PrivateRoute path="/detail/:projectId" component={Project} />
           <PrivateRoute path="/:projectId/addTicket" component={CreateTicket} />
           <PrivateRoute path="/myProfile" component={Profile} />
+          <PrivateRoute path="/updateProfile" component={EditModal} />
           <PrivateRoute path="/tickets/:projectId/:ticketId" component={Ticket} />
           <PrivateRoute exact path="/" component={Dashboard} />
         </Switch>
