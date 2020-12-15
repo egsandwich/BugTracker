@@ -119,7 +119,7 @@ function CreateProject() {
                     <FormControl>
                         <FormGroup>
                             {users.map((user, index) => (
-                                <p><IconButton onClick={() => {
+                                <p key={index}><IconButton onClick={() => {
                                     addToList(index)
                                 }}><AddCircleOutlineOutlinedIcon /> </IconButton> {user.email} </p>
                             ))}
@@ -130,7 +130,7 @@ function CreateProject() {
                 <Grid item xs={12} md={6} xl={4}>
                     <Typography variant="h6">Added members here</Typography>
                     {projectMembers.map((member) => (
-                        <p><IconButton onClick={() => {
+                        <p key={member.email}><IconButton onClick={() => {
                             removeFromList(member)
                         }}><RemoveCircleOutlineIcon /></IconButton> {member.email} </p>
                     ))}
