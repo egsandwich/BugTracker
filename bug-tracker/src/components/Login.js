@@ -1,19 +1,19 @@
-import React, { useRef, useState} from "react";
-import {useHistory, Link } from 'react-router-dom'
-import { Grid, Typography, Button, Input, Box} from '@material-ui/core'
+import React, { useRef, useState } from "react";
+import { useHistory, Link } from 'react-router-dom'
+import { Grid, Typography, Button, Input, Box } from '@material-ui/core'
 import { Alert, AlertTitle } from '@material-ui/lab';
-import {useAuth} from '../contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext'
 
 function Login(props) {
     const email = useRef()
     const password = useRef()
-    const {login} = useAuth()
+    const { login, resetPasswordByEmail } = useAuth()
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
     const history = useHistory()
 
 
-    async function handleLogin(e){
+    async function handleLogin(e) {
         e.preventDefault()
         try {
             setError('')
@@ -26,40 +26,57 @@ function Login(props) {
         setLoading(false)
     }
 
+    async function handleResetPassword() {
+        try {
+            setError('')
+            setLoading(true)
+            if (email.current.value === '') {
+                setError('Please write your email address')
+            } else {
+                await resetPasswordByEmail(email.current.value);
+                setError(`An email is sent to ${email.current.value} for instructions on how to change your password`)
+            }
+        } catch {
+            setError('Something went wrong. Please try again.')
+        }
+        setLoading(false)
+    }
 
     return (
-            <Box m={3}>
+        <Box m={3}>
             <Grid container justify="center" spacing={3}>
-            <Box maxWidth="400px">
-                <Grid container item justify="space-between">
-                <Grid item xl={6} xs={6}>
-                    <Typography variant="h4">Log In</Typography>
-                </Grid>
-                <Grid item> 
-                {error && 
-                <Alert severity="error">
-                    <AlertTitle>{error}</AlertTitle>
-                </Alert>
-                }
-                </Grid>
-                </Grid>
-                    <form onSubmit={handleLogin}>
-                        <Grid item xs={12}>
-                        <Input placeholder="Email" inputRef={email} />  
+                <Box maxWidth="400px">
+                    <Grid container item justify="space-between">
+                        <Grid item xl={6} xs={6}>
+                            <Typography variant="h4">Log In</Typography>
                         </Grid>
                         <Grid item>
-                        <Input placeholder="Password" type="password" inputRef={password}/> 
+                            {error &&
+                                <Alert severity="error">
+                                    <AlertTitle>{error}</AlertTitle>
+                                </Alert>
+                            }
                         </Grid>
-                        <p><Button variant="contained" color="primary" disabled={email.length === 0 || password.length === 0 || loading}type="submit">Login</Button></p>
+                    </Grid>
+                    <form onSubmit={handleLogin}>
+                        <Grid item xs={12}>
+                            <Input placeholder="Email" inputRef={email} />
+                        </Grid>
+                        <Grid item>
+                            <Input placeholder="Password" type="password" inputRef={password} />
+                        </Grid>
+                        <p><Button variant="contained" color="primary" disabled={email.length === 0 || password.length === 0 || loading} type="submit">Login</Button>
+                            <Button variant="contained" disabled={loading} onClick={() => { handleResetPassword() }}>Reset password</Button>
+                        </p>
                         <Grid item xs={12}>
                             <Typography variant="subtitle1">
-                            Need an account? <Link to="/signup">Sign up.</Link>
+                                Need an account? <Link to="/signup">Sign up.</Link>
                             </Typography>
                         </Grid>
                     </form>
                 </Box>
             </Grid>
-            </Box>
+        </Box>
     );
 }
 export default Login;

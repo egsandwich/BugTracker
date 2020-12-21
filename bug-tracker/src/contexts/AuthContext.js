@@ -43,6 +43,10 @@ export function AuthProvider({ children }) {
 
     }
 
+    function resetPasswordByEmail(email) {
+        return base.auth().sendPasswordResetEmail(email);
+    }
+
     function editPassword(password) {
         return currentUser.updatePassword(password);
     }
@@ -65,7 +69,8 @@ export function AuthProvider({ children }) {
         editEmail,
         editDisplayName,
         editPassword,
-        reauthenticate
+        reauthenticate,
+        resetPasswordByEmail
     }
     return (
         <AuthContext.Provider value={value}>
