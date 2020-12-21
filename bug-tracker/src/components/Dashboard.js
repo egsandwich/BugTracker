@@ -15,78 +15,55 @@ import { useAuth } from "../contexts/AuthContext";
 
 function Dashboard(props) {
 
-    // const { currentUser } = useContext(AuthContext)
     const db = base.firestore();
     const [tickets, setTickets] = useState([]);
     const [projects, setProjects] = useState([])
     const history = useHistory()
-    const {currentUser, logout} = useAuth()
+    const { currentUser, logout } = useAuth()
 
 
-    // useEffect(() => {
-    //     db.collection('users').doc(currentUser.uid).onSnapshot(snapshot => {
-    //         snapshot.ref.collection('myProjects').onSnapshot(snapshot => {
-    //                setProjects(snapshot.docs.map(doc => ({
-    //                     projectId: doc.data().projectId,
-    //                     projectName: doc.data().projectName,
-    //                     projectOwner: doc.data().projectOwner,
-    //                 })))
-    //         })
-    //     })
-    // }, [])
+    useEffect(() => {
+        db.collection('users').doc(currentUser.uid).onSnapshot(snapshot => {
+            snapshot.ref.collection('myProjects').onSnapshot(snapshot => {
+                setProjects(snapshot.docs.map(doc => ({
+                    projectId: doc.data().projectId,
+                    projectName: doc.data().projectName,
+                    projectOwner: doc.data().projectOwner,
+                })))
+            })
+        })
+    }, [])
 
-    // useEffect(() => {
-    //     projects.map(project => {
-    //         db.collection("tickets").where("projectId", "==", project.projectId)
-    //         .onSnapshot(snapshot => {
-    //                 setTickets(tickets => [... tickets, ... (snapshot.docs.map(doc => ({
-    //                     ticketId: doc.id,
-    //                     ticketDescription: doc.data().ticketDescription,
-    //                     ticketTitle: doc.data().ticketTitle,
-    //                     ticketCreator: doc.data().ticketCreator,
-    //                     dateCreated: doc.data().dateCreated,
-    //                     project: doc.data().projectId,
-    //                     ticketPriority: doc.data().ticketPriority,
-    //                     ticketType: doc.data().ticketType,
-    //                     ticketStatus: doc.data().ticketStatus,
-    //                 })))])
-                   
-    //                 })
-    //     })
-    // }, [projects.length > 0])
+    useEffect(() => {
+        projects.map(project => {
+            db.collection("tickets").where("projectId", "==", project.projectId)
+                .onSnapshot(snapshot => {
+                    setTickets(tickets => [...tickets, ... (snapshot.docs.map(doc => ({
+                        ticketId: doc.id,
+                        ticketDescription: doc.data().ticketDescription,
+                        ticketTitle: doc.data().ticketTitle,
+                        ticketCreator: doc.data().ticketCreator,
+                        dateCreated: doc.data().dateCreated,
+                        project: doc.data().projectId,
+                        ticketPriority: doc.data().ticketPriority,
+                        ticketType: doc.data().ticketType,
+                        ticketStatus: doc.data().ticketStatus,
+                    })))])
 
-    // useEffect(
-    //     db.collection("projects").onSnapshot(snapshot => {
-    //         // setProjects(snapshot.docs.map(doc => ({
-    //         //     id: doc.id,
-    //         //     projectName: doc.data().projectName,
-    //         // })))
-    //         snapshot.docs.map(doc => {
-    //             console.log(doc.data())
-    //         })
-    //     })
-    // )
+                })
+        })
+    }, [projects.length > 0])
 
-        async function handleLogout(){
-            try {
-                await logout()
-                history.push("/login")
-            } catch {
-                alert("Error")
-            }
-        }
-        return (
-            < Box >
-            {/* {currentUser.displayName} */}
-            {/* <Header username={currentUser.displayName} /> */}
-            {/* {currentUser.email} */}
-        
-            <ChartPriority tickets={tickets }/>
-            <ChartStatus tickets={tickets}/>
-            <ChartType tickets={tickets}/>
+
+    return (
+        < Box m={1}>
+            <Grid container justify="center">
+                <Grid item xs={12} md={4}><ChartPriority tickets={tickets} /></Grid>
+                <Grid item xs={12} md={4}><ChartStatus tickets={tickets} /></Grid>
+                <Grid item xs={12} md={4}><ChartType tickets={tickets} /></Grid>
+            </Grid>
         </Box >
     )
 }
 
 export default Dashboard;
-// export default withRouter(Dashboard);
